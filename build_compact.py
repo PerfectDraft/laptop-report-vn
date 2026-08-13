@@ -234,7 +234,20 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
     <div class="log-sub">Bản cập nhật 13/08/2026 — những gì mới & cách dùng</div>
 
     <div class="log-item">
-      <div class="ver">v2.1 — 13/08/2026 <span class="date">bản mới nhất</span></div>
+      <div class="ver">v2.2 — 13/08/2026 <span class="date">bản mới nhất</span></div>
+      <ul>
+        <li><b>Bỏ thưởng +10 cho card rời (dGPU)</b> — điểm GPU thuần theo PassMark G3D, không còn đảo hạng sai (card rời yếu không vượt iGPU mạnh)</li>
+        <li><b>Điểm Apple Silicon chuẩn Geekbench Metal</b> — M1→M5 Max quy đổi thật (anchor Notebookcheck/Blender), không ước lượng</li>
+        <li><b>Màn hình chấm theo ngành</b> — Game ưu tần số quét, Đồ họa ưu chất lượng màu, Lập trình/VP ưu độ phân giải</li>
+        <li><b>Sửa hệ số giá trị phân khúc</b> — giá ở biên band giờ đúng ±15% (trước chỉ ±7.5%)</li>
+        <li><b>Tách 2 loại điểm</b> — Điểm giá trị (xếp hạng chính) + Điểm phần cứng (xem trong chi tiết máy)</li>
+        <li><b>Badge ▲/▼</b> — cạnh điểm báo máy đang hời hơn/đắt hơn phần cứng thật</li>
+        <li><b>Nút Sort</b> — đổi xếp hạng theo phần cứng thuần hoặc theo giá trị</li>
+      </ul>
+    </div>
+
+    <div class="log-item">
+      <div class="ver">v2.1 — 13/08/2026</div>
       <ul>
         <li><b>Chấm điểm chuẩn PassMark</b> — CPU/GPU tính theo benchmark thật (cpubenchmark.net), không còn ước lượng chủ quan</li>
         <li><b>Điểm RAM/Ổ cứng/Màn hình/Pin theo chuẩn ngành</b> — RAM log2, SSD NVMe vs SATA vs HDD, màn hình PPI + tần số quét + OLED, pin theo giới hạn hàng không 100Wh</li>
@@ -264,7 +277,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 
 <div class="hero">
 <div class="hero-card"><div class="label">Tổng máy khảo sát</div><div class="big">__TOTAL__</div><div class="sub2">máy mới, đã lọc cũ/likenew</div></div>
-<div class="hero-card"><div class="label">Số shop</div><div class="big">12</div><div class="sub2">giá niêm yết hiện tại</div></div>
+<div class="hero-card"><div class="label">Số shop</div><div class="big">13</div><div class="sub2">giá niêm yết hiện tại</div></div>
 <div class="hero-card"><div class="label">Phân khúc giá</div><div class="big">7</div><div class="sub2">từ dưới 10tr đến 40tr+</div></div>
 <div class="hero-card"><div class="label">Chuyên ngành</div><div class="big">6</div><div class="sub2">AI, CNTT, ĐH, VP, Game, CAD</div></div>
 </div>
@@ -415,7 +428,7 @@ seg_chips = "".join(f'<div class="chip" data-seg="{s["id"]}" onclick="selectSeg(
 prof_chips = "".join(f'<div class="chip" data-prof="{p}" onclick="selectProf(this)">{p}</div>' for p in profiles)
 
 html = HTML
-html = html.replace("__TOTAL__", str(len(items)))
+html = html.replace("__TOTAL__", str(len(items_c)))
 html = html.replace("__SEGCHIPS__", seg_chips)
 html = html.replace("__PROFCHIPS__", prof_chips)
 html = html.replace("__SEGS__", json.dumps([{k: s[k] for k in ("id","label","emoji","lo","hi")} for s in SEGMENTS], ensure_ascii=False))
