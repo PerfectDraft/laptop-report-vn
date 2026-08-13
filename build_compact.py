@@ -52,8 +52,8 @@ for r in items:
         continue  # bỏ monitor (Studio Display...) + desktop (Mac Studio/Pro/iMac) khỏi ranking laptop
     items_c.append({
         "n": r["name"], "p": r["price"], "s": r["shop"], "u": r["url"],
-        "c": (r.get("cpu") or "")[:45], "r": (r.get("ram") or "")[:22], "t": (r.get("storage") or "")[:22],
-        "d": (r.get("display") or "")[:35], "g": (r.get("gpu") or "")[:25], "k": r.get("stock","?"),
+        "c": (r.get("cpu") or "")[:60], "r": (r.get("ram") or "")[:40], "t": (r.get("storage") or "")[:45],
+        "d": (r.get("display") or "")[:45], "g": (r.get("gpu") or "")[:50], "k": r.get("stock","?"),
         "q": raw_scores(r),
         "e": 1 if r.get("_fam") in ("unknown", None, "") else 0,
         "i": [round(r["_size"],1), r["_res_s"], 1 if r["_oled"] else 0, round(r["_bat"]), r["_storage"], r["_ram_gb"]],
