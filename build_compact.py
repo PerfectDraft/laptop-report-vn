@@ -47,7 +47,7 @@ def raw_scores(rec):
 
 # Compact items
 items_c = []
-DESKTOP_KW = ("mac studio", "mac pro", "imac", "studio display")
+DESKTOP_KW = ("mac studio", "mac pro", "imac", "studio display", "mac mini")
 for r in items:
     nm = (r.get("name") or "").lower()
     if r.get("_fam") in ("monitor", "desktop") or any(k in nm for k in DESKTOP_KW):
