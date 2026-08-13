@@ -207,6 +207,63 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .vf-down{color:var(--red)}
 .sort-toggle{margin-left:10px;padding:3px 10px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:.72rem;cursor:pointer}
 .sort-toggle.active{color:var(--accent2);border-color:var(--accent2)}
+
+/* ── Update Log + Tiêu chí chấm điểm — notebook design ── */
+.log-modal{display:none;position:fixed;inset:0;background:rgba(5,8,16,.72);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center;padding:16px}
+.log-modal.open{display:flex}
+.log-card{background:linear-gradient(180deg,var(--card),#151d2e);border:1px solid var(--border);border-radius:18px;max-width:620px;width:100%;max-height:86vh;overflow-y:auto;padding:26px 26px 22px;position:relative;box-shadow:0 20px 70px rgba(0,0,0,.65),0 0 0 1px rgba(79,140,255,.08);animation:logIn .35s cubic-bezier(.2,.9,.3,1.2)}
+.log-card::-webkit-scrollbar{width:8px}
+.log-card::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.log-card h3{color:var(--gold);margin:0 0 2px;font-size:1.15rem;letter-spacing:.2px}
+.log-card .log-sub{color:var(--muted);font-size:.78rem;margin-bottom:16px}
+.log-close{position:absolute;top:14px;right:16px;background:var(--card2);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.log-close:hover{color:#fff;border-color:var(--accent2);transform:rotate(90deg)}
+.log-tabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:10px}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:.83rem;cursor:pointer;transition:all .25s}
+.tab-btn:hover{color:var(--text);border-color:var(--accent2)}
+.tab-btn.active{background:linear-gradient(135deg,rgba(79,140,255,.18),rgba(34,211,238,.12));border-color:var(--accent2);color:var(--accent2);font-weight:700;box-shadow:0 0 14px rgba(79,140,255,.15)}
+.tab-pane{display:none;animation:paneIn .3s ease}
+.tab-pane.active{display:block}
+.log-item{border-left:3px solid var(--accent2);padding:10px 12px;margin-bottom:12px;background:var(--card2);border-radius:0 10px 10px 0;animation:paneIn .35s ease both}
+.log-item:nth-child(2){animation-delay:.04s}
+.log-item:nth-child(3){animation-delay:.08s}
+.log-item .ver{font-weight:700;color:var(--accent2);font-size:.9rem}
+.log-item .date{color:var(--muted);font-size:.72rem;margin-left:8px}
+.log-item ul{margin:6px 0 0;padding-left:18px}
+.log-item li{font-size:.82rem;line-height:1.55;color:#d0d5e0;margin-bottom:3px}
+.log-item li b{color:var(--gold)}
+
+/* ── Tiêu chí chấm điểm — spec-sheet cards (Claude redesign 13/08/2026) ── */
+.crit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.crit-grid{grid-template-columns:1fr}}
+.crit-card{position:relative;background:linear-gradient(180deg,var(--card),#141b2a);border:1px solid var(--border);border-radius:16px;padding:17px 17px 15px;overflow:hidden;transition:transform .18s cubic-bezier(.2,.8,.2,1),border-color .18s ease,box-shadow .18s ease}
+.crit-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--c);opacity:.32;transition:opacity .18s ease,box-shadow .18s ease}
+.crit-card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--c) 42%,var(--border));box-shadow:0 14px 30px -12px color-mix(in srgb,var(--c) 45%,transparent)}
+.crit-card:hover::before{opacity:1;box-shadow:0 0 14px 0 var(--c)}
+.crit-cpu{--c:#4f8cff}
+.crit-gpu{--c:#22d3ee}
+.crit-ram{--c:#a78bfa}
+.crit-display{--c:#f472b6}
+.crit-battery{--c:#34d399}
+.crit-storage{--c:#fbbf24}
+.crit-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.crit-icon{flex:0 0 auto;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);transition:transform .18s ease,background .18s ease}
+.crit-card:hover .crit-icon{transform:scale(1.08);background:color-mix(in srgb,var(--c) 22%,transparent)}
+.crit-icon svg{width:18px;height:18px}
+.crit-title{font-size:14.5px;font-weight:650;color:var(--text);margin:0;flex:1;letter-spacing:.1px}
+.crit-badge{font-size:10px;font-weight:650;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--border);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.crit-formula{background:color-mix(in srgb,var(--c) 9%,var(--card));border:1px solid color-mix(in srgb,var(--c) 26%,transparent);border-radius:8px;padding:7px 11px;margin-bottom:10px;overflow-x:auto}
+.crit-formula code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;color:var(--c);white-space:nowrap}
+.crit-desc{font-size:12.5px;line-height:1.6;color:var(--muted);margin:0}
+.crit-total{margin-top:18px;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:15px 18px;text-align:center}
+.crit-total-label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.crit-total-formula{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;color:var(--text);margin:0}
+.tk-term{color:var(--accent2)}
+.tk-weight{color:var(--accent)}
+.tk-value{color:var(--gold)}
+.panel-intro{font-size:13px;color:var(--muted);line-height:1.65;margin:0 0 18px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+@keyframes logIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes paneIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
@@ -226,13 +283,18 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 <button class="info-btn" onclick="openLog()" title="Cập nhật & hướng dẫn">ⓘ</button>
 </div>
 
-<!-- Update Log modal -->
+<!-- Update Log + Tiêu chí chấm điểm modal -->
 <div class="log-modal" id="log-modal" onclick="if(event.target===this)closeLog()">
   <div class="log-card">
     <button class="log-close" onclick="closeLog()">✕</button>
     <h3>📋 Cập nhật & hướng dẫn</h3>
     <div class="log-sub">Bản cập nhật 13/08/2026 — những gì mới & cách dùng</div>
+    <div class="log-tabs">
+      <button class="tab-btn active" data-tab="updates" onclick="switchLogTab(this)">Cập nhật</button>
+      <button class="tab-btn" data-tab="criteria" onclick="switchLogTab(this)">Tiêu chí chấm điểm</button>
+    </div>
 
+    <div class="tab-pane active" id="pane-updates">
     <div class="log-item">
       <div class="ver">v2.3 — 13/08/2026 <span class="date">bản mới nhất</span></div>
       <ul>
@@ -277,6 +339,79 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
         <li><b>Bấm vào máy</b> — xem chi tiết điểm từng tiêu chí & nút tới trang mua</li>
       </ul>
     </div>
+    </div><!-- /pane-updates -->
+
+    <div class="tab-pane" id="pane-criteria">
+      <p class="panel-intro">Mỗi tiêu chí được chuẩn hoá về thang điểm riêng theo công thức bên dưới, sau đó nhân trọng số theo phân khúc sử dụng và hệ số giá trị (điểm/giá) để ra điểm cuối.</p>
+      <div class="crit-grid">
+
+        <article class="crit-card crit-cpu">
+          <div class="crit-head">
+            <div class="crit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.5"/><rect x="10" y="10" width="4" height="4" rx="0.5"/><line x1="9" y1="2" x2="9" y2="5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="15" y1="2" x2="15" y2="5"/><line x1="9" y1="19" x2="9" y2="22"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="15" y1="19" x2="15" y2="22"/><line x1="2" y1="9" x2="5" y2="9"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="2" y1="15" x2="5" y2="15"/><line x1="19" y1="9" x2="22" y2="9"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="19" y1="15" x2="22" y2="15"/></svg></div>
+            <h3 class="crit-title">CPU</h3>
+            <span class="crit-badge">PassMark</span>
+          </div>
+          <div class="crit-formula"><code>score = ln(CPU Mark)</code></div>
+          <p class="crit-desc">Hiệu năng đa nhân theo thang logarit, tránh lệch quá lớn giữa CPU cao cấp và phổ thông.</p>
+        </article>
+
+        <article class="crit-card crit-gpu">
+          <div class="crit-head">
+            <div class="crit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="18" height="10" rx="2"/><circle cx="7.5" cy="12" r="2.2"/><circle cx="14.5" cy="12" r="2.2"/><line x1="20" y1="9.5" x2="22.5" y2="9.5"/><line x1="20" y1="14.5" x2="22.5" y2="14.5"/></svg></div>
+            <h3 class="crit-title">GPU</h3>
+            <span class="crit-badge">PassMark G3D</span>
+          </div>
+          <div class="crit-formula"><code>score = ln(G3D Mark)</code></div>
+          <p class="crit-desc">Hiệu năng đồ hoạ tổng hợp, phản ánh khả năng chơi game và render.</p>
+        </article>
+
+        <article class="crit-card crit-ram">
+          <div class="crit-head">
+            <div class="crit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="18" rx="1.5"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/></svg></div>
+            <h3 class="crit-title">RAM</h3>
+            <span class="crit-badge">Thông số NSX</span>
+          </div>
+          <div class="crit-formula"><code>score = log2(GB)</code></div>
+          <p class="crit-desc">Thang log2 vì tăng gấp đôi (8→16→32GB) mới tạo khác biệt cảm nhận rõ rệt.</p>
+        </article>
+
+        <article class="crit-card crit-display">
+          <div class="crit-head">
+            <div class="crit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="13" rx="1.5"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
+            <h3 class="crit-title">Display</h3>
+            <span class="crit-badge">RTings</span>
+          </div>
+          <div class="crit-formula"><code>score = f(PPI, Hz, Panel)</code></div>
+          <p class="crit-desc">Kết hợp mật độ điểm ảnh, tần số quét và loại tấm nền (OLED / Mini-LED / IPS).</p>
+        </article>
+
+        <article class="crit-card crit-battery">
+          <div class="crit-head">
+            <div class="crit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="17" height="8" rx="1.5"/><line x1="21" y1="10.5" x2="21" y2="13.5"/><path d="M12 9.5 L9.5 12.5 L12 12.5 L10.5 15"/></svg></div>
+            <h3 class="crit-title">Battery</h3>
+            <span class="crit-badge">IATA / NSX</span>
+          </div>
+          <div class="crit-formula"><code>score = Wh / 100</code></div>
+          <p class="crit-desc">Chuẩn hoá theo dung lượng pin thực tế (Wh), khớp giới hạn an toàn hàng không.</p>
+        </article>
+
+        <article class="crit-card crit-storage">
+          <div class="crit-head">
+            <div class="crit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.5"/><path d="M4 5.5 v6 a8 2.5 0 0 0 16 0 v-6"/><path d="M4 11.5 v6 a8 2.5 0 0 0 16 0 v-6"/></svg></div>
+            <h3 class="crit-title">Storage</h3>
+            <span class="crit-badge">Thông số NSX</span>
+          </div>
+          <div class="crit-formula"><code>score = f(loại ổ, dung lượng)</code></div>
+          <p class="crit-desc">NVMe Gen4/5 được cộng điểm ưu tiên so với SATA SSD ở cùng dung lượng.</p>
+        </article>
+
+      </div>
+      <div class="crit-total">
+        <span class="crit-total-label">Công thức tổng</span>
+        <p class="crit-total-formula">Điểm cuối = Σ (<span class="tk-term">tiêu chí</span> × <span class="tk-weight">trọng số ngành</span>) × <span class="tk-value">valueFactor</span></p>
+      </div>
+    </div><!-- /pane-criteria -->
+
   </div>
 </div>
 
@@ -389,6 +524,12 @@ function showDetail(r){
 function closeModal(){document.getElementById('modal').style.display='none';}
 function openLog(){document.getElementById('log-modal').classList.add('open');}
 function closeLog(){document.getElementById('log-modal').classList.remove('open');}
+function switchLogTab(btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pane-'+btn.dataset.tab).classList.add('active');
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeLog();}});
 function toggleOOS(){hideOOS=!hideOOS;document.getElementById('oos-toggle').classList.toggle('active',hideOOS);render();}
 function selectSeg(el){curSeg=el.dataset.seg;document.querySelectorAll('.chip[data-seg]').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
