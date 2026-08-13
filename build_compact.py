@@ -47,8 +47,10 @@ def raw_scores(rec):
 
 # Compact items
 items_c = []
+DESKTOP_KW = ("mac studio", "mac pro", "imac", "studio display")
 for r in items:
-    if r.get("_fam") in ("monitor", "desktop"):
+    nm = (r.get("name") or "").lower()
+    if r.get("_fam") in ("monitor", "desktop") or any(k in nm for k in DESKTOP_KW):
         continue  # bỏ monitor (Studio Display...) + desktop (Mac Studio/Pro/iMac) khỏi ranking laptop
     items_c.append({
         "n": r["name"], "p": r["price"], "s": r["shop"], "u": r["url"],
@@ -187,8 +189,14 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
   .swipe-hint{display:none}
 }
 .header-wrap{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.info-btn{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--accent2);font-size:1.05rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:2px}
-.info-btn:hover{border-color:var(--accent2);background:var(--card2);transform:scale(1.08)}
+.info-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--accent2);font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s;margin-top:2px}
+.info-btn:hover{border-color:var(--accent2);background:var(--card2);transform:scale(1.04)}
+/* Mobile: FAB góc dưới phải — luôn thấy khi cuộn */
+@media(max-width:768px){
+  .info-btn{position:fixed;right:14px;bottom:14px;z-index:90;width:50px;height:50px;border-radius:50%;justify-content:center;font-size:1.2rem;padding:0;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+  .info-btn .ib-label{display:none}
+  body{padding-bottom:70px}
+}
 .log-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:center;justify-content:center;padding:16px}
 .log-modal.open{display:flex}
 .log-card{background:var(--card);border:1px solid var(--border);border-radius:14px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:22px;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.5)}
@@ -280,7 +288,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 <h1>💻 Laptop VN — 7 phân khúc giá × 6 chuyên ngành</h1>
 <div class="sub">Khảo sát 13 shop (TGDD, FPT, PhongVũ, Hacom, No1, CellphoneS, LaptopWorld, LaptopAZ, Laptop88, LaptopGame, Hoàng Hà, GearVN, ShopDunk) • __TOTAL__ máy mới • Cập nhật 13/08/2026 • <b style="color:var(--gold)">Giá + tình trạng hàng đã verify PDP</b></div>
 </div>
-<button class="info-btn" onclick="openLog()" title="Cập nhật & hướng dẫn">ⓘ</button>
+<button class="info-btn" onclick="openLog()" title="Cập nhật & hướng dẫn">ⓘ<span class="ib-label"> Hướng dẫn</span></button>
 </div>
 
 <!-- Update Log + Tiêu chí chấm điểm modal -->
@@ -337,6 +345,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
         <li><b>🙈 Ẩn máy hết hàng</b> — bỏ máy không mua được (vẫn xếp điểm khi bật lại)</li>
         <li><b>⚙️ Tự chỉnh trọng số</b> — kéo slider đổi tầm quan trọng từng tiêu chí</li>
         <li><b>Bấm vào máy</b> — xem chi tiết điểm từng tiêu chí & nút tới trang mua</li>
+        <li><b style="color:var(--green)">▲</b> cạnh điểm = <b>giá hời</b> (rẻ hơn phần cứng) • <b style="color:var(--red)">▼</b> = <b>giá cao</b> hơn phần cứng — cùng dòng chú thích trên mỗi bảng</li>
       </ul>
     </div>
     </div><!-- /pane-updates -->
@@ -552,7 +561,7 @@ function render(){
   // Mobile cards
   const mode = customWeights ? '🎛️ trọng số tự chỉnh' : `ngành <b style="color:var(--accent2)">${curProf}</b>`;
   const oosInfo = hideOOS ? ' (đã ẩn máy hết hàng)' : '';
-  const header = `<div style="margin-bottom:10px;color:var(--muted);font-size:.85rem">Phân khúc <b style="color:var(--accent2)">${seg.emoji} ${seg.label}</b> — <b style="color:var(--accent2)">${scored.length}</b> máy • ${mode}${oosInfo} • <span style="color:var(--muted)">bấm ⓘ xem giải thích • cuộn xem hết</span><button class="sort-toggle ${sortMode==='hw'?'active':''}" onclick="toggleSort()">${sortMode==='hw'?'Sort: phần cứng':'Sort: giá trị'}</button></div>`;
+  const header = `<div style="margin-bottom:10px;color:var(--muted);font-size:.85rem">Phân khúc <b style="color:var(--accent2)">${seg.emoji} ${seg.label}</b> — <b style="color:var(--accent2)">${scored.length}</b> máy • ${mode}${oosInfo} • <span style="color:var(--muted)">bấm ⓘ xem giải thích • <span class="vf-up" style="color:var(--green)">▲</span> giá hời · <span class="vf-down" style="color:var(--red)">▼</span> giá cao hơn phần cứng • cuộn xem hết</span><button class="sort-toggle ${sortMode==='hw'?'active':''}" onclick="toggleSort()">${sortMode==='hw'?'Sort: phần cứng':'Sort: giá trị'}</button></div>`;
   const desktop = `<div class="table-wrap"><table class="head-table"><thead><tr><th class="col-rank">#</th><th>Sản phẩm</th><th class="col-price">Giá</th><th class="col-stock">Hàng</th><th class="col-score">Điểm</th><th class="col-shop">Shop</th></tr></thead></table><div class="table-scroll"><table><tbody>${rows}</tbody></table></div></div>`;
   // Mobile: 1 bảng duy nhất (thead sticky) trong container vuốt ngang+dọc
   const mobile = `<div class="swipe-hint">👆 Vuốt ngang để xem hết bảng • vuốt dọc xem hết máy</div><div class="mobile-scroll"><table class="mobile-table"><thead><tr><th class="col-rank">#</th><th>Sản phẩm</th><th class="col-price">Giá</th><th class="col-stock">Hàng</th><th class="col-score">Điểm</th><th class="col-shop">Shop</th></tr></thead><tbody>${rows}</tbody></table></div>`;
