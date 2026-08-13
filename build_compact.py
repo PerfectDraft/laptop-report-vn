@@ -48,8 +48,8 @@ def raw_scores(rec):
 # Compact items
 items_c = []
 for r in items:
-    if r.get("_fam") == "monitor":
-        continue  # bỏ monitor (Studio Display...) khỏi ranking laptop
+    if r.get("_fam") in ("monitor", "desktop"):
+        continue  # bỏ monitor (Studio Display...) + desktop (Mac Studio/Pro/iMac) khỏi ranking laptop
     items_c.append({
         "n": r["name"], "p": r["price"], "s": r["shop"], "u": r["url"],
         "c": (r.get("cpu") or "")[:45], "r": (r.get("ram") or "")[:22], "t": (r.get("storage") or "")[:22],
@@ -234,7 +234,17 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
     <div class="log-sub">Bản cập nhật 13/08/2026 — những gì mới & cách dùng</div>
 
     <div class="log-item">
-      <div class="ver">v2.2 — 13/08/2026 <span class="date">bản mới nhất</span></div>
+      <div class="ver">v2.3 — 13/08/2026 <span class="date">bản mới nhất</span></div>
+      <ul>
+        <li><b>Chuẩn hoá thang điểm theo max thực tế</b> — CPU/GPU chấm theo đỉnh laptop thật (RTX 5090 = 100), kéo giãn khoảng cách máy cao cấp</li>
+        <li><b>Bỏ máy desktop</b> (Mac Studio/Pro/iMac) khỏi ranking — chỉ còn laptop thật</li>
+        <li><b>Sửa điểm Apple GPU</b> — MacBook "N-core GPU" chấm đúng theo chip (trước bị 100 tràn)</li>
+        <li>Ghi chú hạn chế: TGP/tản nhiệt, RAM hàn chưa có dữ liệu đủ từ shop</li>
+      </ul>
+    </div>
+
+    <div class="log-item">
+      <div class="ver">v2.2 — 13/08/2026</div>
       <ul>
         <li><b>Bỏ thưởng +10 cho card rời (dGPU)</b> — điểm GPU thuần theo PassMark G3D, không còn đảo hạng sai (card rời yếu không vượt iGPU mạnh)</li>
         <li><b>Điểm Apple Silicon chuẩn Geekbench Metal</b> — M1→M5 Max quy đổi thật (anchor Notebookcheck/Blender), không ước lượng</li>
