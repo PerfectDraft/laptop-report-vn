@@ -1,0 +1,19 @@
+Mình đang làm report so sánh laptop VN (production: https://laptop-report-vn.vercel.app): 3308 máy mới từ 12 shop (TGDD/FPT/PhongVũ/Hacom/No1/CellphoneS/LaptopWorld/LaptopAZ/Laptop88/LaptopGame/Hoàng Hà/GearVN), 7 phân khúc giá × 6 chuyên ngành (AI/CNTT/Đồ họa/Văn phòng/Game/CAD). Cách chấm điểm: 6 tiêu chí (CPU/RAM/GPU/Màn hình/Pin/Ổ cứng) × trọng số từng ngành, rồi nhân hệ số giá trị phân khúc vf = 0.85–1.15 theo độ gần giữa band giá. Stack: Python build (build_compact.py: raw_scores Python, computeScore/valueFactorFor JS inline trong HTML), deploy Vercel, kèm test_scoring.py.
+
+Lịch sử: báo cáo v1 ghi MSI Thin 15 (19tr, band 15-20) tổng 75.31 nhưng UI thật hiển thị 66.5 → phát hiện JSON stale (điểm bị tính từ file JSON cũ). Đã fix render điểm live từ raw_scores tại build, test 18/18 pass.
+
+AI review (Claude free) chỉ ra 3 lỗ hổng còn lại:
+1. Test tổng cuối tự viết lại công thức + hardcode weights thay vì gọi hàm production thật → test "tự đồng ý với chính nó", không chứng minh được code thật nhân đúng weights.
+2. SATA SSD (tier mới +0, theo spec NVMe +8 / SATA 0 / HDD -10) chưa có test.
+3. iGPU không được cộng bonus dGPU +10 chưa có invariant test.
+
+Mình vừa fix xong:
+- test_scoring.py v2: trích NGUYÊN VĂN computeScore/valueFactorFor/WKEYS từ build_compact.py và chạy qua Node v26 (subprocess) → test gọi đúng code production, không viết lại công thức. 27/27 pass.
+- PHÁT HIỆN BUG THẬT nhờ test mới: raw_scores cũ gộp "sata" vào nhánh -10 chung với HDD → 20 máy NVMe có chữ "sata" trong mô tả khe cắm ("2 Khe M.2 hỗ trợ SATA hoặc NVMe") bị trừ nhầm 10 điểm. Đã fix: check NVMe/PCIe/Gen4/Gen5 trước (+8), SATA thuần = 0, HDD = -10.
+- Rebuild + deploy Vercel xong, loadtest 500 req / 100 concurrent: 0 lỗi, RPS 22.5. Production verify: MSI Thin 15 q=[84, 40, 78, 62.2, 70, 73.6], UI hiển thị 66.5 đúng.
+
+Câu hỏi hội chuẩn cuối (review giúp mình):
+(a) Cách test gọi JS production qua Node có chuẩn không, hay nên đổi cách khác?
+(b) Logic storage tier NVMe/SATA/HDD + xử lý false-positive "hỗ trợ SATA" đã đủ chặt chưa?
+(c) Còn invariant/test nào nên thêm cho vf (hệ số giá trị) hoặc weights không?
+(d) Nhìn tổng thể còn sót gì trước khi chốt production?

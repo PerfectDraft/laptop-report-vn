@@ -1,0 +1,22 @@
+# raw data (lớn, không push)
+raw/
+_raw/
+_recheck/
+*.bak
+__pycache__/
+*.pyc
+
+# probe/cache html
+*.html
+!deploy/index.html
+!bao-cao-laptop-phan-khuc.html
+detail_cache/
+
+# build artifacts
+deploy/.vercel/
+.vercel/
+node_modules/
+
+# logs
+*.log
+sort-log.txt

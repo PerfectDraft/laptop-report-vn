@@ -1,0 +1,72 @@
+[
+ {
+  "id": "d10",
+  "label": "Dưới 10 triệu",
+  "range": [
+   0,
+   10000000
+  ],
+  "emoji": "💸",
+  "note": "Laptop cơ bản, sinh viên, văn phòng nhẹ — Intel N / R3 / i3 cũ"
+ },
+ {
+  "id": "10-15",
+  "label": "10 – 15 triệu",
+  "range": [
+   10000000,
+   15000000
+  ],
+  "emoji": "📘",
+  "note": "Sinh viên phổ thông, i3/Core 3/R5, 8-16GB"
+ },
+ {
+  "id": "15-20",
+  "label": "15 – 20 triệu",
+  "range": [
+   15000000,
+   20000000
+  ],
+  "emoji": "🎯",
+  "note": "Điểm cân bằng — i5/Core 5/R5, 16GB, có OLED/2K"
+ },
+ {
+  "id": "20-25",
+  "label": "20 – 25 triệu",
+  "range": [
+   20000000,
+   25000000
+  ],
+  "emoji": "🚀",
+  "note": "Ultra 5/Ryzen AI 5, dGPU entry, màn đẹp"
+ },
+ {
+  "id": "25-30",
+  "label": "25 – 30 triệu",
+  "range": [
+   25000000,
+   30000000
+  ],
+  "emoji": "⚡",
+  "note": "Ultra 7/Ryzen AI 7, RTX 4050/5050"
+ },
+ {
+  "id": "30-40",
+  "label": "30 – 40 triệu",
+  "range": [
+   30000000,
+   40000000
+  ],
+  "emoji": "💎",
+  "note": "Hiệu năng cao, RTX 4060/5060, màn OLED 2K"
+ },
+ {
+  "id": "40+",
+  "label": "Trên 40 triệu",
+  "range": [
+   40000000,
+   1000000000000
+  ],
+  "emoji": "👑",
+  "note": "Cao cấp — RTX 5070+, Ultra 9, MacBook Pro"
+ }
+]
