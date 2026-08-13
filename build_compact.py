@@ -41,8 +41,8 @@ def raw_scores(rec):
     batt_s = rec.get("_batt_s", 0)
     # Display: PPI + Hz + panel (0.45/0.30/0.25)
     display_s = rec.get("_display_s", 0)
-    # GPU: PassMark G3D log + bonus dGPU
-    gpu_eff = min(100, rec["_gpu_s"] + (10 if rec["_gpu_cls"] == "dgpu" else 0))
+    # GPU: PassMark G3D log — KHÔNG bonus dGPU (Claude review: G3D đã phản ánh khoảng cách dGPU/iGPU, +10 tạo đảo hạng)
+    gpu_eff = rec["_gpu_s"]
     return [rec["_cpu_s"], round(ram_s,1), round(gpu_eff,1), round(display_s,1), round(batt_s,1), round(storage_s,1)]
 
 # Compact items
@@ -57,6 +57,7 @@ for r in items:
         "q": raw_scores(r),
         "e": 1 if r.get("_fam") in ("unknown", None, "") else 0,
         "i": [round(r["_size"],1), r["_res_s"], 1 if r["_oled"] else 0, round(r["_bat"]), r["_storage"], r["_ram_gb"]],
+        "dp": r.get("_disp_parts") or [50, 0, 70],  # [ppi, hz_score, panel]
     })
 
 # HTML (dùng chung template cũ nhưng JS đọc compact)
@@ -201,6 +202,11 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .log-item ul{margin:6px 0 0;padding-left:18px}
 .log-item li{font-size:.82rem;line-height:1.55;color:#d0d5e0;margin-bottom:3px}
 .log-item li b{color:var(--gold)}
+.vf-badge{font-size:.65rem;vertical-align:super;margin-right:2px}
+.vf-up{color:var(--green)}
+.vf-down{color:var(--red)}
+.sort-toggle{margin-left:10px;padding:3px 10px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:.72rem;cursor:pointer}
+.sort-toggle.active{color:var(--accent2);border-color:var(--accent2)}
 </style>
 </head>
 <body>
@@ -320,8 +326,18 @@ function badge(k){if(k==='CÒN')return '<span class="badge badge-green">● Còn
 function spec(r){const p=[];if(r.c)p.push('CPU: '+r.c);if(r.r)p.push('RAM: '+r.r);if(r.t)p.push('SSD: '+r.t);if(r.d)p.push('Màn: '+r.d);if(r.g)p.push('GPU: '+r.g);return p.join(' • ');}
 function estBadge(r){return r.e ? '<span class="badge badge-gray" title="CPU không nhận diện được — điểm ước tính">≈ ước tính</span> ' : '';}
 function currentWeights(){return customWeights || PROFS[curProf].w;}
-function computeScore(r, w){let t=0;for(let i=0;i<6;i++)t+=(r.q[i]||0)*(w[WKEYS[i]]||0);return t;}
-function valueFactorFor(price, seg){const center=(seg.lo+seg.hi)/2;const dist=Math.abs(price-center)/Math.max(1,(seg.hi-seg.lo));const raw=1.0+(price>center? -dist*0.15 : dist*0.15);return Math.min(1.15,Math.max(0.85,raw));}
+// Trọng số nội bộ màn hình theo ngành [PPI, Hz, Panel] (Claude review)
+const DISP_W = {
+  "AI / Data Science": [0.50,0.15,0.35],
+  "Lập trình / CNTT": [0.55,0.10,0.35],
+  "Đồ họa / Thiết kế": [0.30,0.20,0.50],
+  "Kinh tế / Văn phòng": [0.55,0.10,0.35],
+  "Game / Đa phương tiện": [0.25,0.50,0.25],
+  "Cơ khí / Kỹ thuật (CAD)": [0.50,0.15,0.35],
+};
+function dispScore(r, prof){const dp=r.dp||[50,0,70];const w=DISP_W[prof]||[0.45,0.30,0.25];return dp[0]*w[0]+dp[1]*w[1]+dp[2]*w[2];}
+function computeScore(r, w, prof){const parts=r.q.slice();parts[3]=dispScore(r, prof||curProf);let t=0;for(let i=0;i<6;i++)t+=(parts[i]||0)*(w[WKEYS[i]]||0);return t;}
+function valueFactorFor(price, seg){const center=(seg.lo+seg.hi)/2;const dist=Math.abs(price-center)/((seg.hi-seg.lo)/2);const raw=1.0+(price>center? -dist*0.15 : dist*0.15);return Math.min(1.15,Math.max(0.85,raw));}
 
 function showDetail(r){
   const w = currentWeights();
@@ -334,15 +350,16 @@ function showDetail(r){
   }
   const seg = SEGS.find(s=>s.id===curSeg);
   const vf = valueFactorFor(r.p, seg);
-  const score = computeScore(r,w) * vf;
+  const hw = computeScore(r,w,curProf);
+  const score = hw * vf;
   const estNote = r.e ? '<div style="color:var(--gold);font-size:.75rem;margin-top:4px">⚠️ CPU không nhận diện được — điểm CPU là ước tính (60/100)</div>' : '';
   document.getElementById('modal-body').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px">
       <div><div style="font-weight:700;font-size:1rem;line-height:1.4">${estBadge(r)}${r.n}</div>
       <div style="color:var(--muted);font-size:.8rem;margin-top:4px">${fmtPrice(r.p)} • ${SHOPL[r.s]||r.s} • ${badge(r.k)}</div>${estNote}</div>
-      <div style="text-align:center;min-width:80px"><div style="font-size:1.6rem;font-weight:800;color:var(--accent2)">${score.toFixed(1)}</div><div style="font-size:.65rem;color:var(--muted)">ĐIỂM</div></div>
+      <div style="text-align:center;min-width:80px"><div style="font-size:1.6rem;font-weight:800;color:var(--accent2)">${score.toFixed(1)}</div><div style="font-size:.65rem;color:var(--muted)">ĐIỂM GIÁ TRỊ</div><div style="font-size:.9rem;font-weight:700;color:var(--gold);margin-top:2px">${hw.toFixed(1)}</div><div style="font-size:.6rem;color:var(--muted)">phần cứng</div></div>
     </div>
-    <div style="color:var(--muted);font-size:.78rem;margin-bottom:10px;line-height:1.7">Ngành <b style="color:var(--accent2)">${curProf}</b> — điểm tiêu chí × trọng số = <b style="color:var(--accent2)">${computeScore(r,w).toFixed(1)}</b><br>Hệ số giá trị phân khúc (độ gần giữa band ${seg.emoji} ${seg.label}): <b style="color:var(--accent2)">${vf.toFixed(2)}</b> — giới hạn 0.85–1.15<br>= <b style="color:var(--accent2)">${score.toFixed(1)}</b> điểm cuối</div>
+    <div style="color:var(--muted);font-size:.78rem;margin-bottom:10px;line-height:1.7">Ngành <b style="color:var(--accent2)">${curProf}</b> — điểm phần cứng (tiêu chí × trọng số) = <b style="color:var(--accent2)">${hw.toFixed(1)}</b><br>Hệ số giá trị phân khúc (độ gần giữa band ${seg.emoji} ${seg.label}): <b style="color:var(--accent2)">${vf.toFixed(2)}</b> — giới hạn 0.85–1.15<br>= <b style="color:var(--accent2)">${score.toFixed(1)}</b> điểm cuối (giá trị)</div>
     <table style="width:100%;font-size:.8rem"><tr><th>Tiêu chí</th><th style="text-align:center">Trọng số</th><th style="text-align:center">Điểm</th><th style="text-align:center">Đóng góp</th><th style="width:30%"></th><th>Chi tiết</th></tr>${rows}</table>`;
   document.getElementById('modal').style.display = 'flex';
 }
@@ -353,21 +370,25 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeL
 function toggleOOS(){hideOOS=!hideOOS;document.getElementById('oos-toggle').classList.toggle('active',hideOOS);render();}
 function selectSeg(el){curSeg=el.dataset.seg;document.querySelectorAll('.chip[data-seg]').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
 function selectProf(el){curProf=el.dataset.prof;customWeights=null;document.querySelectorAll('.chip[data-prof]').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
+function toggleSort(){sortMode = sortMode==='hw' ? 'value' : 'hw';render();}
+let sortMode = 'value'; // 'value' | 'hw'
 function render(){
   const seg = SEGS.find(s=>s.id===curSeg);
   const w = currentWeights();
   let inBand = ITEMS.filter(x=>x.p>=seg.lo&&x.p<seg.hi);
   if(hideOOS) inBand = inBand.filter(x=>x.k!=='HẾT');
-  const scored = inBand.map(r=>({r, s: computeScore(r,w)*valueFactorFor(r.p,seg)})).sort((a,b)=>b.s-a.s);
+  const scored = inBand.map(r=>({r, hw: computeScore(r,w,curProf), vf: valueFactorFor(r.p,seg)})).map(x=>({...x, s:x.hw*x.vf}));
+  scored.sort((a,b)=> sortMode==='hw' ? b.hw-a.hw : b.s-a.s);
   // Desktop table
   let rows = scored.map((item,i)=>{
     const r = item.r, oos = r.k==='HẾT'?' class="oos-row"':'';
-    return `<tr${oos}><td class="rank ${i===0?'rank-1':''} col-rank">${i+1}</td><td><div class="name">${estBadge(r)}${r.n.slice(0,85)}</div><div class="spec">${spec(r)}</div></td><td class="price col-price">${fmtPrice(r.p)}</td><td class="col-stock">${badge(r.k)}</td><td class="score col-score">${item.s.toFixed(1)} <span class="info-btn" onclick="showDetail(ITEMS[${ITEMS.indexOf(r)}])" title="Xem giải thích điểm">ⓘ</span></td><td class="col-shop"><span class="shop">${SHOPL[r.s]||r.s}</span><br><a class="view-btn" href="${r.u}" target="_blank" rel="noopener">Xem</a></td></tr>`;
+    const vfBadge = item.vf > 1.08 ? '<span class="vf-badge vf-up" title="Giá thấp hơn phần cứng — đáng mua">▲</span>' : (item.vf < 0.92 ? '<span class="vf-badge vf-down" title="Giá cao hơn phần cứng">▼</span>' : '');
+    return `<tr${oos}><td class="rank ${i===0?'rank-1':''} col-rank">${i+1}</td><td><div class="name">${estBadge(r)}${r.n.slice(0,85)}</div><div class="spec">${spec(r)}</div></td><td class="price col-price">${fmtPrice(r.p)}</td><td class="col-stock">${badge(r.k)}</td><td class="score col-score">${item.s.toFixed(1)} ${vfBadge}<span class="info-btn" onclick="showDetail(ITEMS[${ITEMS.indexOf(r)}])" title="Xem giải thích điểm">ⓘ</span></td><td class="col-shop"><span class="shop">${SHOPL[r.s]||r.s}</span><br><a class="view-btn" href="${r.u}" target="_blank" rel="noopener">Xem</a></td></tr>`;
   }).join('');
   // Mobile cards
   const mode = customWeights ? '🎛️ trọng số tự chỉnh' : `ngành <b style="color:var(--accent2)">${curProf}</b>`;
   const oosInfo = hideOOS ? ' (đã ẩn máy hết hàng)' : '';
-  const header = `<div style="margin-bottom:10px;color:var(--muted);font-size:.85rem">Phân khúc <b style="color:var(--accent2)">${seg.emoji} ${seg.label}</b> — <b style="color:var(--accent2)">${scored.length}</b> máy • ${mode}${oosInfo} • <span style="color:var(--muted)">bấm ⓘ xem giải thích • cuộn xem hết</span></div>`;
+  const header = `<div style="margin-bottom:10px;color:var(--muted);font-size:.85rem">Phân khúc <b style="color:var(--accent2)">${seg.emoji} ${seg.label}</b> — <b style="color:var(--accent2)">${scored.length}</b> máy • ${mode}${oosInfo} • <span style="color:var(--muted)">bấm ⓘ xem giải thích • cuộn xem hết</span><button class="sort-toggle ${sortMode==='hw'?'active':''}" onclick="toggleSort()">${sortMode==='hw'?'Sort: phần cứng':'Sort: giá trị'}</button></div>`;
   const desktop = `<div class="table-wrap"><table class="head-table"><thead><tr><th class="col-rank">#</th><th>Sản phẩm</th><th class="col-price">Giá</th><th class="col-stock">Hàng</th><th class="col-score">Điểm</th><th class="col-shop">Shop</th></tr></thead></table><div class="table-scroll"><table><tbody>${rows}</tbody></table></div></div>`;
   // Mobile: 1 bảng duy nhất (thead sticky) trong container vuốt ngang+dọc
   const mobile = `<div class="swipe-hint">👆 Vuốt ngang để xem hết bảng • vuốt dọc xem hết máy</div><div class="mobile-scroll"><table class="mobile-table"><thead><tr><th class="col-rank">#</th><th>Sản phẩm</th><th class="col-price">Giá</th><th class="col-stock">Hàng</th><th class="col-score">Điểm</th><th class="col-shop">Shop</th></tr></thead><tbody>${rows}</tbody></table></div>`;

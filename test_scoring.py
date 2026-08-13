@@ -21,7 +21,11 @@ def extract_js_line(key):
     j = src.index("\n", i)
     return src[i:j]
 
-FUNCS = "\n".join(extract_js_line(k) for k in ("const WKEYS =", "function computeScore", "function valueFactorFor"))
+FUNCS = "\n".join(extract_js_line(k) for k in ("const WKEYS =", "function dispScore", "function computeScore", "function valueFactorFor"))
+# DISP_W là object multi-line — lấy cả block
+_i = src.index("const DISP_W = {")
+_j = src.index("};", _i) + 2
+FUNCS += "\n" + src[_i:_j]
 
 # Lấy PROFS + SEGMENTS thật từ data build
 data = json.load(open(os.path.join(BASE, "raw/full/_ALL_scored.json"), encoding="utf-8"))
@@ -42,9 +46,9 @@ def node_score(q, w, price, seg):
     qj = json.dumps(q)
     code = f"""
 {FUNCS}
-const r = {{q: {qj}}}; const w = {wj};
+const r = {{q: {qj}, dp: [50, 0, 70]}}; const w = {wj};
 const seg = {{lo: {seg['lo']}, hi: {seg['hi']}}};
-const base = computeScore(r, w);
+const base = computeScore(r, w, 'AI / Data Science');
 const vf = valueFactorFor({price}, seg);
 console.log(JSON.stringify({{base, vf, final: base * vf}}));
 """
@@ -71,7 +75,7 @@ cpu, ram, gpu, disp, batt, stor = q
 print(f"  raw_scores = {q}")
 check("CPU", cpu, 84)
 check("RAM (log2 16GB)", ram, 50.0)
-check("GPU dGPU (min(100,72+10))", gpu, 82.0)
+check("GPU dGPU (không bonus — Claude review)", gpu, 72.0)
 check("Display", disp, 55.0)
 check("Pin (50Wh)", batt, 50.0)
 check("Storage 512 NVMe4 (85x1.0)", stor, 85.0)
@@ -80,9 +84,10 @@ check("Storage 512 NVMe4 (85x1.0)", stor, 85.0)
 w_ai = PROFS["AI / Data Science"]["w"]
 seg15 = {"lo": 15_000_000, "hi": 20_000_000}
 r = node_score(q, w_ai, 19_000_000, seg15)
-check("computeScore THẬT (Node) total AI", r["base"], 71.37)
-check("valueFactorFor THẬT (Node) dist 0.3", r["vf"], 0.955)
-check("Final = computeScore x vf (code thật)", r["final"], 68.15)
+check("computeScore THẬT (Node) total AI", r["base"], 67.54)
+# dist mới (nửa band): |19-17.5|/2.5 = 0.6 -> vf = 1-0.6*0.15 = 0.91
+check("valueFactorFor THẬT (Node) dist 0.6", r["vf"], 0.91)
+check("Final = computeScore x vf (code thật)", r["final"], 61.46)
 print(f"  Node trả về: base={r['base']:.2f} vf={r['vf']:.3f} final={r['final']:.2f}")
 
 # ── Boundary cases (giữ nguyên từ v1) ──
@@ -116,12 +121,12 @@ check("Hybrid SSD 128 + HDD 500 (ổ chính SSD) -> 48.8", hyb, 48.8)
 hdd1 = raw_scores(_dummy(_storage=500, storage="HDD 500GB", _storage_s=16.2))[5]
 check("HDD 500GB đơn thuần -> 16.2", hdd1, 16.2)
 
-# ── 3. iGPU invariant: bonus +10 CHỈ cho dGPU ──
-print("\n[iGPU invariant — bonus chỉ cho dGPU]")
+# ── 3. GPU invariant (Claude review: KHÔNG bonus dGPU — G3D đã phản ánh) ──
+print("\n[iGPU/dGPU invariant — không bonus dGPU (Claude review)]")
 ig = raw_scores(_dummy(_gpu_s=90, _gpu_cls="igpu"))[2]
 dg = raw_scores(_dummy(_gpu_s=90, _gpu_cls="dgpu"))[2]
-check("iGPU 90 KHÔNG bonus -> 90", ig, 90.0)      # case phân biệt được (không bị clamp che)
-check("dGPU 90 +10 -> 100", dg, 100.0)
+check("iGPU 90 -> 90", ig, 90.0)
+check("dGPU 90 KHÔNG bonus -> 90 (trước +10=100)", dg, 90.0)
 check("iGPU 95+ vẫn không vượt 100", raw_scores(_dummy(_gpu_s=99, _gpu_cls="igpu"))[2], 99.0)
 check("iGPU 100 không thành 110->100 (invariant)", raw_scores(_dummy(_gpu_s=100, _gpu_cls="igpu"))[2], 100.0)
 
