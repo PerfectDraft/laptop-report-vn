@@ -8,6 +8,7 @@ __pycache__/
 
 # probe/cache html
 *.html
+!index.html
 !deploy/index.html
 !bao-cao-laptop-phan-khuc.html
 detail_cache/

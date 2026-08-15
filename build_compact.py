@@ -632,6 +632,7 @@ out_paths = [
     os.path.expanduser("~/laptop-report-19m/bao-cao-laptop-phan-khuc.html"),
     os.path.join(os.path.dirname(__file__), "bao-cao-laptop-phan-khuc.html"),
     os.path.join(os.path.dirname(__file__), "deploy", "index.html"),
+    os.path.join(os.path.dirname(__file__), "index.html"),
 ]
 for out in out_paths:
     os.makedirs(os.path.dirname(out), exist_ok=True)
