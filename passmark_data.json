@@ -1,0 +1,23 @@
+{
+  "Intel Core Ultra 5 225H": {
+    "passmark_score": 28133,
+    "single_thread": 4257,
+    "previous_score": 23500,
+    "diff_percentage": 19.71,
+    "last_updated": "2026-08-14 12:26:38",
+    "url": "https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+Ultra+5+225H",
+    "note": "Tự động cập nhật do lệch 19.7% vs baseline cũ"
+  },
+  "Intel Core Ultra 7 155H": {
+    "passmark_score": 24800,
+    "single_thread": 3800,
+    "last_updated": "2025-01-01 00:00:00",
+    "note": "Baseline cũ"
+  },
+  "AMD Ryzen 7 8845HS": {
+    "passmark_score": 28900,
+    "single_thread": 3950,
+    "last_updated": "2025-01-01 00:00:00",
+    "note": "Baseline cũ"
+  }
+}
