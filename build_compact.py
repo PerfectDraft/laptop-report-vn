@@ -100,6 +100,14 @@ h1{font-size:1.6rem;margin-bottom:4px;letter-spacing:-.01em}
 .chip.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;box-shadow:0 0 12px rgba(79,140,255,.3)}
 .chip .cnt{font-size:.68rem;opacity:.75}
 
+/* ── Search bar ── */
+.search-row{position:relative;margin:12px 0 14px;display:flex;align-items:center}
+.search-box{width:100%;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:10px 42px 10px 18px;color:var(--text);font-size:.88rem;outline:none;transition:all .2s ease}
+.search-box:focus{border-color:var(--accent2);box-shadow:0 0 14px rgba(34,211,238,.2);background:var(--card2)}
+.search-box::placeholder{color:var(--muted);opacity:.8}
+.clear-search{position:absolute;right:14px;background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all .2s}
+.clear-search:hover{color:#fff;background:var(--card2)}
+
 .price{color:var(--green);font-weight:700;white-space:nowrap}
 .rank{font-size:1.05rem;font-weight:800;color:var(--accent2)}
 .rank-1{color:var(--gold)}
@@ -464,7 +472,12 @@ tr.oos-row td{opacity:.55}
 <div class="row"><div class="row-label">🎓 Chuyên ngành:</div><div class="chips-group">__PROFCHIPS__</div></div>
 </div>
 
-<div class="row" style="margin-top:8px">
+<div class="search-row">
+  <input type="text" id="search-box" class="search-box" placeholder="🔍 Tìm nhanh theo tên máy, chip CPU, RAM, GPU, SSD, tên Shop..." oninput="filterSearch(this.value)" autocomplete="off">
+  <button class="clear-search" id="clear-search-btn" onclick="clearSearch()" style="display:none" title="Xóa tìm kiếm">✕</button>
+</div>
+
+<div class="row" style="margin-top:4px">
   <button id="oos-toggle" class="chip" onclick="toggleOOS()" style="border-color:var(--accent2)">🙈 Ẩn máy hết hàng (vẫn xếp điểm khi bật lại)</button>
 </div>
 
@@ -509,11 +522,22 @@ const SHOPL = __SHOPL__;
 const KNAMES = ['CPU','RAM','GPU','Màn hình','Pin','Ổ cứng'];
 const WKEYS = ['cpu','ram','gpu','display','battery','storage'];
 let curSeg = 's15', curProf = 'AI / Data Science';
-let customWeights = null, hideOOS = false;
+let customWeights = null, hideOOS = false, searchKw = '';
 
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtPrice(p){return (p/1e6).toFixed(1).replace('.',',')+'tr';}
 function badge(k){if(k==='CÒN')return '<span class="badge badge-green">● Còn hàng</span>';if(k==='HẾT')return '<span class="badge badge-red">✕ Hết hàng</span>';if(k==='LIÊN HỆ')return '<span class="badge badge-gold">✆ Liên hệ</span>';return '<span class="badge badge-gray">? Kiểm tra</span>';}
-function spec(r){const p=[];if(r.c)p.push('CPU: '+r.c);if(r.r)p.push('RAM: '+r.r);if(r.t)p.push('SSD: '+r.t);if(r.d)p.push('Màn: '+r.d);if(r.g)p.push('GPU: '+r.g);return p.join(' • ');}
+function spec(r){
+  const p=[];
+  if(r.c) p.push('CPU: '+escHtml(r.c));
+  const ramStr = r.r || (r.i && r.i[5] ? r.i[5]+'GB' : '');
+  if(ramStr) p.push('RAM: '+escHtml(ramStr));
+  const ssdStr = r.t || (r.i && r.i[4] ? r.i[4]+'GB' : '');
+  if(ssdStr) p.push('SSD: '+escHtml(ssdStr));
+  if(r.d) p.push('Màn: '+escHtml(r.d));
+  if(r.g) p.push('GPU: '+escHtml(r.g));
+  return p.join(' • ');
+}
 function estBadge(r){return r.e ? '<span class="badge badge-gray" title="CPU không nhận diện được — điểm ước tính">≈ ước tính</span> ' : '';}
 function currentWeights(){return customWeights || PROFS[curProf].w;}
 // Trọng số nội bộ màn hình theo ngành [PPI, Hz, Panel] (Claude review)
@@ -531,7 +555,11 @@ function valueFactorFor(price, seg){const center=(seg.lo+seg.hi)/2;const dist=Ma
 
 function showDetail(r){
   const w = currentWeights();
-  const detVals = [r.c||'—', r.r||r.i[5]+'GB', r.g||'—', r.i[0]+'" OLED='+(r.i[2]?'có':'không'), r.i[3]+'Wh', r.t||r.i[4]+'GB'];
+  const ramStr = r.r || (r.i && r.i[5] ? r.i[5]+'GB' : '—');
+  const ssdStr = r.t || (r.i && r.i[4] ? r.i[4]+'GB' : '—');
+  const dispStr = (r.i[0] ? r.i[0]+'" ' : '') + 'OLED=' + (r.i[2] ? 'có' : 'không');
+  const batStr = r.i[3] ? r.i[3]+'Wh' : 'Chưa rõ';
+  const detVals = [escHtml(r.c||'—'), escHtml(ramStr), escHtml(r.g||'—'), escHtml(dispStr), escHtml(batStr), escHtml(ssdStr)];
   let rows = '';
   for(let i=0;i<6;i++){
     const sc = r.q[i]||0, wt = w[WKEYS[i]]||0;
@@ -543,15 +571,16 @@ function showDetail(r){
   const hw = computeScore(r,w,curProf);
   const score = hw * vf;
   const estNote = r.e ? '<div style="color:var(--gold);font-size:.75rem;margin-top:4px">⚠️ CPU không nhận diện được — điểm CPU là ước tính (60/100)</div>' : '';
+  const safeUrl = encodeURI(r.u||'');
   document.getElementById('modal-body').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px">
-      <div><div style="font-weight:700;font-size:1.05rem;line-height:1.4">${estBadge(r)}${r.n}</div>
-      <div style="color:var(--muted);font-size:.82rem;margin-top:4px"><span class="price">${fmtPrice(r.p)}</span> • <b>${SHOPL[r.s]||r.s}</b> • ${badge(r.k)}</div>${estNote}</div>
+      <div><div style="font-weight:700;font-size:1.05rem;line-height:1.4">${estBadge(r)}${escHtml(r.n)}</div>
+      <div style="color:var(--muted);font-size:.82rem;margin-top:4px"><span class="price">${fmtPrice(r.p)}</span> • <b>${escHtml(SHOPL[r.s]||r.s)}</b> • ${badge(r.k)}</div>${estNote}</div>
       <div class="modal-score-box" style="text-align:center;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:8px 12px"><div style="font-size:1.6rem;font-weight:800;color:var(--accent2);line-height:1.1">${score.toFixed(1)}</div><div style="font-size:.65rem;color:var(--muted);font-weight:600">ĐIỂM GIÁ TRỊ</div><div style="font-size:.92rem;font-weight:700;color:var(--gold);margin-top:4px">${hw.toFixed(1)}</div><div style="font-size:.6rem;color:var(--muted)">phần cứng</div></div>
     </div>
-    <div style="color:var(--muted);font-size:.78rem;margin-bottom:12px;line-height:1.7;background:rgba(79,140,255,.05);border:1px solid var(--border);border-radius:10px;padding:10px 12px">Ngành <b style="color:var(--accent2)">${curProf}</b> — Điểm phần cứng: <b style="color:var(--accent2)">${hw.toFixed(1)}</b> • Hệ số giá trị phân khúc ${seg.emoji}: <b style="color:var(--accent2)">${vf.toFixed(2)}</b> (chặn 0.85–1.15)<br>➜ <b style="color:var(--accent2);font-size:.85rem">${score.toFixed(1)}</b> điểm xếp hạng</div>
+    <div style="color:var(--muted);font-size:.78rem;margin-bottom:12px;line-height:1.7;background:rgba(79,140,255,.05);border:1px solid var(--border);border-radius:10px;padding:10px 12px">Ngành <b style="color:var(--accent2)">${escHtml(curProf)}</b> — Điểm phần cứng: <b style="color:var(--accent2)">${hw.toFixed(1)}</b> • Hệ số giá trị phân khúc ${seg.emoji}: <b style="color:var(--accent2)">${vf.toFixed(2)}</b> (chặn 0.85–1.15)<br>➜ <b style="color:var(--accent2);font-size:.85rem">${score.toFixed(1)}</b> điểm xếp hạng</div>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="modal-table"><thead><tr><th>Tiêu chí</th><th style="text-align:center">Trọng số</th><th style="text-align:center">Điểm</th><th style="text-align:center">Đóng góp</th><th class="col-bar" style="width:25%">Thang điểm</th><th>Cấu hình</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div style="margin-top:14px;text-align:right"><a class="view-btn" href="${r.u}" target="_blank" rel="noopener" style="padding:7px 18px;font-size:.82rem">Xem trên website ${SHOPL[r.s]||r.s} ↗</a></div>`;
+    <div style="margin-top:14px;text-align:right"><a class="view-btn" href="${safeUrl}" target="_blank" rel="noopener" style="padding:7px 18px;font-size:.82rem">Xem trên website ${escHtml(SHOPL[r.s]||r.s)} ↗</a></div>`;
   document.getElementById('modal').style.display = 'flex';
 }
 function closeModal(){document.getElementById('modal').style.display='none';}
@@ -564,6 +593,15 @@ function switchLogTab(btn){
   document.getElementById('pane-'+btn.dataset.tab).classList.add('active');
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeLog();}});
+function filterSearch(val){
+  searchKw = val.trim().toLowerCase();
+  document.getElementById('clear-search-btn').style.display = searchKw ? 'flex' : 'none';
+  render();
+}
+function clearSearch(){
+  const inp = document.getElementById('search-box');
+  if(inp){ inp.value = ''; filterSearch(''); }
+}
 function toggleOOS(){hideOOS=!hideOOS;document.getElementById('oos-toggle').classList.toggle('active',hideOOS);render();}
 function selectSeg(el){curSeg=el.dataset.seg;document.querySelectorAll('.chip[data-seg]').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
 function selectProf(el){curProf=el.dataset.prof;customWeights=null;document.querySelectorAll('.chip[data-prof]').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
@@ -574,6 +612,7 @@ function render(){
   const w = currentWeights();
   let inBand = ITEMS.filter(x=>x.p>=seg.lo&&x.p<seg.hi);
   if(hideOOS) inBand = inBand.filter(x=>x.k!=='HẾT');
+  if(searchKw) inBand = inBand.filter(x=> (x.n+' '+x.c+' '+x.r+' '+x.t+' '+x.g+' '+(SHOPL[x.s]||x.s)).toLowerCase().includes(searchKw));
   const scored = inBand.map(r=>({r, hw: computeScore(r,w,curProf), vf: valueFactorFor(r.p,seg)})).map(x=>({...x, s:x.hw*x.vf}));
   scored.sort((a,b)=> sortMode==='hw' ? b.hw-a.hw : b.s-a.s);
   
@@ -581,12 +620,17 @@ function render(){
     const r = item.r, oos = r.k==='HẾT'?' class="oos-row"':'';
     const vfBadge = item.vf > 1.08 ? '<span class="vf-badge vf-up" title="Giá thấp hơn phần cứng — đáng mua">▲</span>' : (item.vf < 0.92 ? '<span class="vf-badge vf-down" title="Giá cao hơn phần cứng">▼</span>' : '');
     const itemIdx = ITEMS.indexOf(r);
-    return `<tr${oos} onclick="showDetail(ITEMS[${itemIdx}])"><td class="rank ${i===0?'rank-1':''} col-rank">${i+1}</td><td><div class="name">${estBadge(r)}${r.n.slice(0,85)}</div><div class="spec">${spec(r)}</div></td><td class="price col-price">${fmtPrice(r.p)}</td><td class="col-stock">${badge(r.k)}</td><td class="score col-score"><span class="score-val">${item.s.toFixed(1)}</span> ${vfBadge}<button class="score-detail-btn" onclick="event.stopPropagation();showDetail(ITEMS[${itemIdx}])" title="Xem chi tiết cách tính điểm" aria-label="Chi tiết điểm">ⓘ</button></td><td class="col-shop"><span class="shop">${SHOPL[r.s]||r.s}</span><br><a class="view-btn" href="${r.u}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Xem</a></td></tr>`;
+    return `<tr${oos} onclick="showDetail(ITEMS[${itemIdx}])"><td class="rank ${i===0?'rank-1':''} col-rank">${i+1}</td><td><div class="name">${estBadge(r)}${escHtml(r.n.slice(0,85))}</div><div class="spec">${spec(r)}</div></td><td class="price col-price">${fmtPrice(r.p)}</td><td class="col-stock">${badge(r.k)}</td><td class="score col-score"><span class="score-box"><span class="score-val">${item.s.toFixed(1)}</span> ${vfBadge}<button class="score-detail-btn" onclick="event.stopPropagation();showDetail(ITEMS[${itemIdx}])" title="Xem chi tiết cách tính điểm" aria-label="Chi tiết điểm">ⓘ</button></span></td><td class="col-shop"><span class="shop">${escHtml(SHOPL[r.s]||r.s)}</span><br><a class="view-btn" href="${encodeURI(r.u||'')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Xem</a></td></tr>`;
   }).join('');
 
-  const mode = customWeights ? '🎛️ trọng số tự chỉnh' : `ngành <b style="color:var(--accent2)">${curProf}</b>`;
+  if(!rows){
+    rows = `<tr><td colspan="6" style="text-align:center;padding:36px 16px;color:var(--muted);font-size:.9rem">🔍 Không tìm thấy máy nào phù hợp${searchKw?' với từ khóa "'+escHtml(searchKw)+'"':''} trong phân khúc này.<br><span style="font-size:.78rem;opacity:.8;display:inline-block;margin-top:6px">Thử tìm từ khóa khác, tắt "Ẩn máy hết hàng", hoặc chọn phân khúc giá khác.</span></td></tr>`;
+  }
+
+  const mode = customWeights ? '🎛️ trọng số tự chỉnh' : `ngành <b style="color:var(--accent2)">${escHtml(curProf)}</b>`;
   const oosInfo = hideOOS ? ' (đã ẩn máy hết hàng)' : '';
-  const header = `<div class="table-header-info"><div class="thi-left">Phân khúc <b style="color:var(--accent2)">${seg.emoji} ${seg.label}</b> — <b style="color:var(--accent2)">${scored.length}</b> máy • ${mode}${oosInfo}</div><div class="thi-right"><span class="thi-hint">bấm ⓘ hoặc bấm hàng xem giải thích • <span class="vf-up" style="color:var(--green)">▲</span> giá hời · <span class="vf-down" style="color:var(--red)">▼</span> giá cao hơn phần cứng</span><button class="sort-toggle ${sortMode==='hw'?'active':''}" onclick="toggleSort()">${sortMode==='hw'?'Sort: phần cứng':'Sort: giá trị'}</button></div></div>`;
+  const searchInfo = searchKw ? ` (lọc theo "${escHtml(searchKw)}")` : '';
+  const header = `<div class="table-header-info"><div class="thi-left">Phân khúc <b style="color:var(--accent2)">${seg.emoji} ${seg.label}</b> — <b style="color:var(--accent2)">${scored.length}</b> máy • ${mode}${oosInfo}${searchInfo}</div><div class="thi-right"><span class="thi-hint">bấm ⓘ hoặc bấm hàng xem giải thích • <span class="vf-up" style="color:var(--green)">▲</span> giá hời · <span class="vf-down" style="color:var(--red)">▼</span> giá cao hơn phần cứng</span><button class="sort-toggle ${sortMode==='hw'?'active':''}" onclick="toggleSort()">${sortMode==='hw'?'Sort: phần cứng':'Sort: giá trị'}</button></div></div>`;
   const swipeHint = `<div class="swipe-hint">👆 Vuốt ngang xem hết bảng • Bấm vào hàng hoặc nút ⓘ để xem chi tiết điểm</div>`;
   const table = `<div class="table-scroll-wrap"><table class="report-table"><thead><tr><th class="col-rank">#</th><th>Sản phẩm</th><th class="col-price">Giá</th><th class="col-stock">Hàng</th><th class="col-score">Điểm</th><th class="col-shop">Shop</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   document.getElementById('table-container').innerHTML = header + swipeHint + table;
@@ -594,7 +638,7 @@ function render(){
 // custom weights
 const CRITERIA = [['cpu','CPU'],['ram','RAM'],['gpu','GPU'],['display','Màn hình'],['battery','Pin'],['storage','Ổ cứng']];
 function togglePanel(){const b=document.getElementById('cp-body');b.classList.toggle('open');document.getElementById('cp-arrow').innerText=b.classList.contains('open')?'▴':'▾';if(b.classList.contains('open')&&!document.getElementById('cp-sliders').children.length)buildSliders();}
-function buildSliders(){const w=currentWeights();let vals=CRITERIA.map(([k])=>Math.round(w[k]*100));const diff=100-vals.reduce((a,b)=>a+b,0);if(diff!==0){let mx=0;for(let i=1;i<vals.length;i++)if(vals[i]>vals[mx])mx=i;vals[mx]+=diff;}document.getElementById('cp-sliders').innerHTML=CRITERIA.map(([k,l],i)=>`<div class="cp-slider"><label>${l}</label><input type="range" min="0" max="50" step="1" value="${vals[i]}" data-key="${k}" oninput="this.parentElement.querySelector('.val').innerText=this.value+'%';updateTotal()"><span class="val">${vals[i]}%</span></div>`).join('');updateTotal();}
+function buildSliders(){const w=currentWeights();let vals=CRITERIA.map(([k])=>Math.round(w[k]*100));const diff=100-vals.reduce((a,b)=>a+b,0);if(diff!==0){let mx=0;for(let i=1;i<vals.length;i++)if(vals[i]>vals[mx])mx=i;vals[mx]+=diff;}document.getElementById('cp-sliders').innerHTML=CRITERIA.map(([k,l],i)=>`<div class="cp-slider"><label>${l}</label><input type="range" min="0" max="100" step="1" value="${vals[i]}" data-key="${k}" oninput="this.parentElement.querySelector('.val').innerText=this.value+'%';updateTotal()"><span class="val">${vals[i]}%</span></div>`).join('');updateTotal();}
 function updateTotal(){const t=Array.from(document.querySelectorAll('#cp-sliders input')).reduce((s,i)=>s+parseInt(i.value),0);document.getElementById('cp-total-val').innerText=t+'%';document.getElementById('cp-total-warn').style.display=t===100?'none':'inline';}
 function useProfile(p){curProf=p;document.querySelectorAll('.chip[data-prof]').forEach(c=>c.classList.remove('active'));const ch=document.querySelector(`.chip[data-prof="${p}"]`);if(ch)ch.classList.add('active');customWeights=null;buildSliders();render();}
 function resetCustom(){useProfile(curProf);}

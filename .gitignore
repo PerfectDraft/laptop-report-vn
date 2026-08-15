@@ -21,3 +21,4 @@ node_modules/
 # logs
 *.log
 sort-log.txt
+.vercel
