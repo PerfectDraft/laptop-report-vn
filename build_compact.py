@@ -23,6 +23,69 @@ SHOP_LABEL = {
     "hoangha": "Hoàng Hà", "gearvn": "GearVN",
 }
 
+UPDATE_LOGS = [
+    {
+        "ver": "v2.5",
+        "date": "16/08/2026",
+        "is_latest": True,
+        "items": [
+            "<b>Tìm kiếm tức thì (Instant Real-Time Search)</b> — Ô tìm kiếm thông minh theo thời gian thực (tên máy, chip CPU, RAM, GPU, SSD, Shop) kèm nút xóa ✕ tiện lợi",
+            "<b>Tự động Fallback Thông số SSD/RAM</b> — 100% 3.328 máy hiển thị đầy đủ dung lượng RAM và SSD thực tế, khắc phục triệt để máy thiếu trường storage thô",
+            "<b>Mở rộng Slider Trọng số tới 100%</b> — Cho phép tùy biến trọng số linh hoạt tới 100% cho nhu cầu chuyên biệt (AI, đồ họa 3D, code)",
+            "<b>Bảo mật DOM & Thoát nhanh bằng phím ESC</b> — Escape chống tấn công XSS 100%, nhấn ESC đóng nhanh các cửa sổ modal",
+            "<b>Trạng thái Tìm kiếm Rỗng (Empty State)</b> — Thông báo trực quan và gợi ý khi không tìm thấy máy phù hợp",
+        ]
+    },
+    {
+        "ver": "v2.4",
+        "date": "16/08/2026",
+        "is_latest": False,
+        "items": [
+            "<b>Sửa toàn diện giao diện Mobile & Màn hình hẹp</b> — Khắc phục lỗi mất nút xem chi tiết Score (<code>ⓘ</code>), tối ưu thanh cuộn và layout trực quan",
+            "<b>Chạm nhanh (Quick Tap)</b> — Bấm vào bất kỳ đâu trên dòng sản phẩm để mở ngay bảng phân tích điểm chi tiết",
+            "<b>Đường viền bảng liền mạch</b> — Tối ưu CSS table-cell đảm bảo đường phân cách giữa các hàng phẳng đẹp, không bị lồi",
+            "<b>Tự động cập nhật số liệu động</b> — Đếm động số lượng máy, đại lý phân phối và các phân khúc giá",
+        ]
+    },
+    {
+        "ver": "v2.3",
+        "date": "13/08/2026",
+        "is_latest": False,
+        "items": [
+            "<b>Chuẩn hoá thang điểm theo max thực tế</b> — CPU/GPU chấm theo đỉnh laptop thật (RTX 5090 = 100), kéo giãn khoảng cách máy cao cấp",
+            "<b>Bỏ máy desktop</b> (Mac Studio/Pro/iMac) khỏi ranking — chỉ còn laptop thật",
+            "<b>Sửa điểm Apple GPU</b> — MacBook 'N-core GPU' chấm đúng theo chip (trước bị 100 tràn)",
+            "Ghi chú hạn chế: TGP/tản nhiệt, RAM hàn chưa có dữ liệu đủ từ shop",
+        ]
+    },
+    {
+        "ver": "v2.2",
+        "date": "13/08/2026",
+        "is_latest": False,
+        "items": [
+            "<b>Bỏ thưởng +10 cho card rời (dGPU)</b> — điểm GPU thuần theo PassMark G3D, không còn đảo hạng sai (card rời yếu không vượt iGPU mạnh)",
+            "<b>Điểm Apple Silicon chuẩn Geekbench Metal</b> — M1→M5 Max quy đổi thật (anchor Notebookcheck/Blender), không ước lượng",
+            "<b>Màn hình chấm theo ngành</b> — Game ưu tần số quét, Đồ họa ưu chất lượng màu, Lập trình/VP ưu độ phân giải",
+            "<b>Sửa hệ số giá trị phân khúc</b> — giá ở biên band giờ đúng ±15% (trước chỉ ±7.5%)",
+            "<b>Tách 2 loại điểm</b> — Điểm giá trị (xếp hạng chính) + Điểm phần cứng (xem trong chi tiết máy)",
+            "<b>Badge ▲/▼</b> — cạnh điểm báo máy đang hời hơn/đắt hơn phần cứng thật",
+            "<b>Nút Sort</b> — đổi xếp hạng theo phần cứng thuần hoặc theo giá trị",
+        ]
+    },
+    {
+        "ver": "v2.1",
+        "date": "13/08/2026",
+        "is_latest": False,
+        "items": [
+            "<b>Chấm điểm chuẩn PassMark</b> — CPU/GPU tính theo benchmark thật (cpubenchmark.net), không còn ước lượng chủ quan",
+            "<b>Điểm RAM/Ổ cứng/Màn hình/Pin theo chuẩn ngành</b> — RAM log2, SSD NVMe vs SATA vs HDD, màn hình PPI + tần số quét + OLED, pin theo giới hạn hàng không 100Wh",
+            "<b>Đủ thông số 99.8% máy</b> — bổ sung CPU/GPU cho hơn 800 máy từ PDP thật",
+            "<b>Thêm ShopDunk</b> — 63 máy Mac (MacBook/Neo/Mac mini/iMac/Studio/Pro) vào danh sách",
+            "<b>Tình trạng hàng verify PDP</b> — Còn hàng / Sắp về hàng / Hết hàng từ trang chính hãng",
+        ]
+    },
+]
+
 def fmt_price(p):
     return f"{p//1_000_000}.{(p%1_000_000)//100_000}tr"
 
@@ -324,57 +387,15 @@ tr.oos-row td{opacity:.55}
     </div>
 
     <div class="tab-pane active" id="pane-updates">
-    <div class="log-item">
-      <div class="ver">v2.4 — 16/08/2026 <span class="date">bản mới nhất</span></div>
-      <ul>
-        <li><b>Sửa toàn diện giao diện Mobile & Màn hình hẹp</b> — Khắc phục lỗi mất nút xem chi tiết Score (<code>ⓘ</code>), tối ưu thanh cuộn và layout trực quan</li>
-        <li><b>Chạm nhanh (Quick Tap)</b> — Bấm vào bất kỳ đâu trên dòng sản phẩm để mở ngay bảng phân tích điểm chi tiết</li>
-        <li><b>Đường viền bảng liền mạch</b> — Tối ưu CSS table-cell đảm bảo đường phân cách giữa các hàng phẳng đẹp, không bị lồi</li>
-        <li><b>Tự động cập nhật số liệu động</b> — Đếm động số lượng máy, đại lý phân phối và các phân khúc giá</li>
-      </ul>
-    </div>
-
-    <div class="log-item">
-      <div class="ver">v2.3 — 13/08/2026</div>
-      <ul>
-        <li><b>Chuẩn hoá thang điểm theo max thực tế</b> — CPU/GPU chấm theo đỉnh laptop thật (RTX 5090 = 100), kéo giãn khoảng cách máy cao cấp</li>
-        <li><b>Bỏ máy desktop</b> (Mac Studio/Pro/iMac) khỏi ranking — chỉ còn laptop thật</li>
-        <li><b>Sửa điểm Apple GPU</b> — MacBook "N-core GPU" chấm đúng theo chip (trước bị 100 tràn)</li>
-        <li>Ghi chú hạn chế: TGP/tản nhiệt, RAM hàn chưa có dữ liệu đủ từ shop</li>
-      </ul>
-    </div>
-
-    <div class="log-item">
-      <div class="ver">v2.2 — 13/08/2026</div>
-      <ul>
-        <li><b>Bỏ thưởng +10 cho card rời (dGPU)</b> — điểm GPU thuần theo PassMark G3D, không còn đảo hạng sai (card rời yếu không vượt iGPU mạnh)</li>
-        <li><b>Điểm Apple Silicon chuẩn Geekbench Metal</b> — M1→M5 Max quy đổi thật (anchor Notebookcheck/Blender), không ước lượng</li>
-        <li><b>Màn hình chấm theo ngành</b> — Game ưu tần số quét, Đồ họa ưu chất lượng màu, Lập trình/VP ưu độ phân giải</li>
-        <li><b>Sửa hệ số giá trị phân khúc</b> — giá ở biên band giờ đúng ±15% (trước chỉ ±7.5%)</li>
-        <li><b>Tách 2 loại điểm</b> — Điểm giá trị (xếp hạng chính) + Điểm phần cứng (xem trong chi tiết máy)</li>
-        <li><b>Badge ▲/▼</b> — cạnh điểm báo máy đang hời hơn/đắt hơn phần cứng thật</li>
-        <li><b>Nút Sort</b> — đổi xếp hạng theo phần cứng thuần hoặc theo giá trị</li>
-      </ul>
-    </div>
-
-    <div class="log-item">
-      <div class="ver">v2.1 — 13/08/2026</div>
-      <ul>
-        <li><b>Chấm điểm chuẩn PassMark</b> — CPU/GPU tính theo benchmark thật (cpubenchmark.net), không còn ước lượng chủ quan</li>
-        <li><b>Điểm RAM/Ổ cứng/Màn hình/Pin theo chuẩn ngành</b> — RAM log2, SSD NVMe vs SATA vs HDD, màn hình PPI + tần số quét + OLED, pin theo giới hạn hàng không 100Wh</li>
-        <li><b>Đủ thông số 99.8% máy</b> — bổ sung CPU/GPU cho hơn 800 máy từ PDP thật</li>
-        <li><b>Thêm ShopDunk</b> — 63 máy Mac (MacBook/Neo/Mac mini/iMac/Studio/Pro) vào danh sách</li>
-        <li><b>Tình trạng hàng verify PDP</b> — Còn hàng / Sắp về hàng / Hết hàng từ trang chính hãng</li>
-      </ul>
-    </div>
-
+__UPDATE_LOGS__
     <div class="log-item">
       <div class="ver">Cách dùng</div>
       <ul>
         <li><b>🎯 Phân khúc giá</b> — lọc theo khoảng giá (dưới 10tr → 40tr+)</li>
         <li><b>🎓 Chuyên ngành</b> — đổi trọng số điểm theo ngành (AI, CNTT, Đồ họa, VP, Game, CAD)</li>
+        <li><b>🔍 Tìm kiếm tức thì</b> — gõ tên máy, chip CPU, RAM, GPU, SSD hoặc Shop để lọc ngay lập tức</li>
         <li><b>🙈 Ẩn máy hết hàng</b> — bỏ máy không mua được (vẫn xếp điểm khi bật lại)</li>
-        <li><b>⚙️ Tự chỉnh trọng số</b> — kéo slider đổi tầm quan trọng từng tiêu chí</li>
+        <li><b>⚙️ Tự chỉnh trọng số</b> — kéo slider đổi tầm quan trọng từng tiêu chí (tới 100%)</li>
         <li><b>Bấm vào máy</b> — xem chi tiết điểm từng tiêu chí & nút tới trang mua</li>
         <li><b style="color:var(--green)">▲</b> cạnh điểm = <b>giá hời</b> (rẻ hơn phần cứng) • <b style="color:var(--red)">▼</b> = <b>giá cao</b> hơn phần cứng — cùng dòng chú thích trên mỗi bảng</li>
       </ul>
@@ -658,13 +679,26 @@ prof_chips = "".join(f'<div class="chip" data-prof="{p}" onclick="selectProf(thi
 shops_found = sorted(list(set(r["s"] for r in items_c)))
 shop_names_str = ", ".join(SHOP_LABEL.get(s, s.upper()) for s in shops_found)
 
+update_logs_html = []
+for entry in UPDATE_LOGS:
+    tag = '<span class="date">bản mới nhất</span>' if entry.get("is_latest") else ""
+    li_items = "".join(f"<li>{it}</li>" for it in entry["items"])
+    update_logs_html.append(f"""    <div class="log-item">
+      <div class="ver">{entry['ver']} — {entry['date']} {tag}</div>
+      <ul>{li_items}</ul>
+    </div>""")
+update_logs_str = "\n".join(update_logs_html)
+latest_ver = UPDATE_LOGS[0]["ver"]
+latest_date = UPDATE_LOGS[0]["date"]
+
 html = HTML
 html = html.replace("__TOTAL__", str(len(items_c)))
 html = html.replace("__SHOPS_COUNT__", str(len(shops_found)))
 html = html.replace("__SHOP_NAMES__", shop_names_str)
 html = html.replace("__SEGS_COUNT__", str(len(SEGMENTS)))
 html = html.replace("__PROFS_COUNT__", str(len(profiles)))
-html = html.replace("__UPDATED_DATE__", "16/08/2026")
+html = html.replace("__UPDATED_DATE__", f"{latest_ver} — {latest_date}")
+html = html.replace("__UPDATE_LOGS__", update_logs_str)
 html = html.replace("__SEGCHIPS__", seg_chips)
 html = html.replace("__PROFCHIPS__", prof_chips)
 html = html.replace("__SEGS__", json.dumps([{k: s[k] for k in ("id","label","emoji","lo","hi")} for s in SEGMENTS], ensure_ascii=False))
