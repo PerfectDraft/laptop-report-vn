@@ -4,6 +4,50 @@ Tài liệu ghi nhận toàn bộ lịch sử chỉnh sửa, lý do kỹ thuật
 
 ---
 
+## 🚀 Phiên bản v2.5 — Audit Toàn Diện, Tìm & Fix Triệt Để Bug Dữ Liệu & UI (16/08/2026)
+
+**Ngày:** 16/08/2026 • **Agents tham gia:** `orchestrator`, `data-reconciler`, `scoring-architect`, `frontend-specialist`, `qa-test-engineer`, `security-auditor` • **Trạng thái:** ✅ Đã hoàn tất & nghiệm thu 100%
+
+### 1. Vấn đề Phát hiện qua Deep Audit (Issues & Root Causes)
+1. **Thiếu hiển thị Dung lượng SSD/RAM trong chuỗi tóm tắt bảng:** 
+   - *Nguyên nhân:* 1.437 máy trong dataset cào ban đầu không có trường `storage` riêng biệt do shop nhúng dung lượng vào tiêu đề. Hàm `spec(r)` trong JS chỉ kiểm tra `r.t` (storage) và `r.r` (RAM), nếu chuỗi rỗng sẽ bỏ qua hiển thị ổ cứng/RAM trong dòng tóm tắt bảng dù mảng cấu hình số `r.i` (`r.i[4]`: SSD GB, `r.i[5]`: RAM GB) vẫn được trích xuất đầy đủ.
+2. **Nguy cơ XSS & Lỗi vỡ HTML khi tên máy có ký tự đặc biệt:**
+   - *Nguyên nhân:* Tên máy `r.n` và thông số linh kiện từ web shop chứa ký tự ngoặc kép `"` (ví dụ: `15.6"`), dấu `<` / `>` được render trực tiếp vào innerHTML mà chưa qua hàm escape.
+3. **Giới hạn thanh trượt trọng số (Sliders max cap = 50%):**
+   - *Nguyên nhân:* Input range slider trước đây đặt `max="50"`, ngăn cản người dùng chuyên sâu muốn dồn trọng số lên tới `60% – 100%` cho một tiêu chí duy nhất (ví dụ: chỉ ưu tiên GPU cho render 3D hoặc CPU cho biên dịch code).
+4. **Thiếu công cụ Tìm kiếm nhanh (Instant Search Bar) & Xử lý Trạng thái Trống (Empty State):**
+   - *Nguyên nhân:* Người dùng phải cuộn qua hàng trăm máy để tìm model mong muốn; khi bật bộ lọc hết hàng mà không có máy nào phù hợp thì bảng bị trống trơn không có thông báo hướng dẫn.
+5. **Trải nghiệm phím ESC & An toàn URL:**
+   - Cần hỗ trợ phím `Escape` để đóng nhanh các modal đang mở và mã hóa URL `encodeURI(r.u)` khi tạo link sang shop.
+
+### 2. Các Thay đổi Chi tiết Đã Thực Hiện (Detailed Fixes)
+- **Tự động Fallback Thông số Kỹ thuật (`spec(r)` & `showDetail(r)`):**
+  - Cập nhật hàm `spec(r)` tự động trích xuất dung lượng RAM từ `r.i[5]` và SSD từ `r.i[4]` khi chuỗi văn bản bị thiếu. 100% 3.328 laptop hiển thị đầy đủ RAM và SSD.
+- **Tích Hợp Thanh Tìm Kiếm Tức Thì (Instant Real-Time Search Bar):**
+  - Bổ sung ô tìm kiếm `.search-box` với icon tìm kiếm và nút xóa nhanh `✕`. Lọc tức thì theo mọi trường: tên máy, CPU, RAM, GPU, SSD, tên shop.
+  - Bổ sung Empty State thông minh với gợi ý cụ thể khi không tìm thấy kết quả phù hợp.
+- **Mở rộng Thanh trượt Trọng số (Custom Sliders):**
+  - Nâng giới hạn tối đa của slider từ `50%` lên `100%`, cho phép người dùng tự do cấu hình trọng số theo nhu cầu cá nhân.
+- **Bảo mật XSS & An toàn Render HTML:**
+  - Viết hàm chuẩn `escHtml(s)` để escape an toàn toàn bộ tên sản phẩm, thông số linh kiện, nhãn shop và tên ngành nghề trước khi đưa vào DOM.
+  - Mã hóa an toàn `encodeURI(r.u)` cho các liên kết PDP cửa hàng.
+- **Tiện ích Tương Tác & Trợ năng (Accessibility):**
+  - Lắng nghe sự kiện bàn phím `Escape` đóng tức thì cả Modal Chi tiết Điểm (`#modal`) và Modal Nhật ký Cập nhật (`#log-modal`).
+
+### 3. Kết quả Kiểm thử & Nghiệm thu (Verification & Results)
+- ✅ **Unit Tests Scoring**: `python test_scoring.py` $\rightarrow$ **35/35 PASSED** (100% khớp Node.js runtime).
+- ✅ **Pre-commit Checklist**: `python .agent/scripts/checklist.py` $\rightarrow$ **5/5 PASSED**.
+- ✅ **Browser Subagent Test**:
+  - Test tìm kiếm hợp lệ (`MSI`): Lọc tức thì ra đúng 13 máy MSI trong phân khúc.
+  - Test nút xóa tìm kiếm `✕`: Reset tức thì về danh sách toàn bộ 332 máy.
+  - Test tìm kiếm không tồn tại (`xyznonexistent999`): Hiển thị thông báo Empty State rõ ràng, trực quan.
+  - Test Modal Chi tiết: Toàn bộ thông số CPU, RAM, GPU, Màn hình, Pin, SSD hiển thị chuẩn xác 100%.
+  - Test phím `Escape`: Đóng modal mượt mà.
+  - Test Sliders: Kéo chỉnh tới 100% trơn tru.
+  - Video nghiệm thu: `search_and_bugfix_test_1786818936401.webp`.
+
+---
+
 ## 🚀 Phiên bản v2.4 — Sửa lỗi UI Mobile & Nút Chi tiết Score (16/08/2026)
 
 **Ngày:** 16/08/2026 • **Agents tham gia:** `orchestrator`, `project-planner`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist` • **Trạng thái:** ✅ Đã hoàn tất & build release

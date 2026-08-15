@@ -21,6 +21,17 @@ Mỗi khi kết thúc một phiên chạy autonomous, ghi lại theo mẫu sau:
 
 ## 📜 Lịch sử Phiên Chạy
 
+### [2026-08-16 01:38] Session: Deep Audit, Bug Fixing & Instant Search Integration
+- **Chế độ**: Orchestration (Multi-Agent Squad)
+- **Agents tham gia**: `orchestrator`, `data-reconciler`, `scoring-architect`, `frontend-specialist`, `qa-test-engineer`, `security-auditor`
+- **Mục tiêu**: Rà soát toàn diện dataset 3.328 máy, bất biến toán học, vá lỗi thiếu chuỗi RAM/SSD, mở rộng slider lên 100%, bổ sung thanh tìm kiếm tức thì, xử lý Empty State, bảo mật XSS và phím ESC.
+- **Các thay đổi**:
+  - `build_compact.py`: Fallback spec RAM/SSD từ `r.i`, thêm search bar & clear button, empty state, slider `max="100"`, `escHtml()`, phím `Escape`.
+  - Sinh lại đồng bộ `deploy/index.html`, `index.html`, `bao-cao-laptop-phan-khuc.html`.
+  - `BAO_CAO_SUA_DOI.md` & `PROGRESS.md`: Cập nhật chi tiết v2.5.
+- **Kết quả Checklist**: 5/5 PASSED (35/35 scoring unit tests, 100% clamping invariant, 0 security leaks).
+- **Trạng thái**: ✅ Hoàn tất xuất sắc & nghiệm thu qua Browser Subagent.
+
 ### [2026-08-16 00:35] Session: Fix Mobile UI & Score Detail Button
 - **Chế độ**: Orchestration (2-Phase)
 - **Agents tham gia**: `orchestrator`, `project-planner`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist`
@@ -43,6 +54,3 @@ Mỗi khi kết thúc một phiên chạy autonomous, ghi lại theo mẫu sau:
   - Tạo cấu trúc `.agent/rules/` (`GEMINI.md`, `scoring-contract.md`, `autonomous-policy.md`, `security-rules.md`, `progress-tracking.md`)
   - Tạo cấu trúc `.agent/workflows/` (`orchestrate.md`, `crawl-and-sync.md`, `test.md`, `deploy.md`, `ui-ux-pro-max.md`, `debug.md`, `scan.md`, `plan.md`, `brainstorm.md`, `autonomous.md`)
   - Tạo cấu trúc `.agent/skills/` (`parallel-agents`, `scoring-engine`, `scraping-pipeline`, `compact-builder`, `testing-patterns`, `systematic-debugging`, `vulnerability-scanner`, `web-design-guidelines`)
-  - Tạo cấu trúc `.agent/scripts/` (`checklist.py`, `verify_all.py`, `session_manager.py`)
-- **Kết quả Checklist**: 5/5 PASSED
-- **Trạng thái**: ✅ Thành công hoàn hảo.
