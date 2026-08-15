@@ -11,33 +11,30 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 img,svg,video,canvas{max-width:100%;height:auto;display:block}
 button,input,select,textarea{font:inherit;color:inherit}
 body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;line-height:1.5;overflow-x:hidden}
-::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 html{scrollbar-color:var(--border) var(--bg)}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;padding:24px}
-h1{font-size:1.6rem;margin-bottom:4px}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;padding:24px}
+h1{font-size:1.6rem;margin-bottom:4px;letter-spacing:-.01em}
 .sub{color:var(--muted);font-size:.9rem;margin-bottom:20px}
 .badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.72rem;font-weight:600;white-space:nowrap}
 .badge-green{background:rgba(52,211,153,.12);color:var(--green)}
 .badge-red{background:rgba(248,113,113,.12);color:var(--red)}
 .badge-gold{background:rgba(251,191,36,.12);color:var(--gold)}
 .badge-gray{background:rgba(147,163,188,.15);color:var(--muted)}
-.hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:20px}
+.hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px}
 .hero-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:12px;padding:14px}
 .hero-card .label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
 .hero-card .big{font-size:1.15rem;font-weight:700;color:var(--accent2)}
 .hero-card .sub2{font-size:.78rem;color:var(--muted);margin-top:4px}
 .controls{margin:16px 0}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
-.row-label{font-size:.8rem;color:var(--muted);width:110px}
-.chip{padding:6px 14px;border-radius:20px;background:var(--card);border:1px solid var(--border);cursor:pointer;font-size:.82rem;transition:.2s;white-space:nowrap}
-.chip:hover{background:var(--card2)}
-.chip.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.row-label{font-size:.82rem;font-weight:600;color:var(--muted);min-width:110px}
+.chips-group{display:flex;flex-wrap:wrap;gap:7px;flex:1}
+.chip{padding:6px 14px;border-radius:20px;background:var(--card);border:1px solid var(--border);cursor:pointer;font-size:.82rem;transition:all .18s;white-space:nowrap;user-select:none}
+.chip:hover{background:var(--card2);border-color:var(--accent)}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;box-shadow:0 0 12px rgba(79,140,255,.3)}
 .chip .cnt{font-size:.68rem;opacity:.75}
-table{width:100%;border-collapse:collapse;background:var(--card);font-size:.83rem}
-th{background:var(--card2);padding:9px 10px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.7rem;letter-spacing:.4px}
-td{padding:9px 10px;border-top:1px solid var(--border);vertical-align:top}
-tr:hover td{background:rgba(79,140,255,.05)}
-tr.oos-row td{opacity:.55}
+
 .price{color:var(--green);font-weight:700;white-space:nowrap}
 .rank{font-size:1.05rem;font-weight:800;color:var(--accent2)}
 .rank-1{color:var(--gold)}
@@ -45,6 +42,8 @@ tr.oos-row td{opacity:.55}
 .name{font-weight:600;line-height:1.35}
 .spec{font-size:.75rem;color:var(--muted);margin-top:3px;line-height:1.45}
 .score{font-weight:700;color:var(--accent2);white-space:nowrap}
+.score-box{display:inline-flex;align-items:center;gap:4px;vertical-align:middle}
+.score-val{font-size:.95rem}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .section{margin:24px 0 10px;font-size:1.05rem;font-weight:700;border-left:4px solid var(--accent);padding-left:12px}
 .footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:.78rem;line-height:1.7}
@@ -52,19 +51,30 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .notice .ico{font-size:1.3rem;line-height:1.2}
 .notice b{color:var(--gold)}
 .notice a{color:var(--accent2);font-weight:600;text-decoration:underline}
-@media (max-width:768px){.notice{font-size:.78rem;padding:10px 12px}}
 .credit{position:relative;display:inline-block;cursor:help}
 .credit a{color:var(--accent2);font-weight:600}
 .credit .tip{visibility:hidden;opacity:0;position:absolute;bottom:130%;left:50%;transform:translateX(-50%) translateY(4px);background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-size:.75rem;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.45);transition:opacity .18s,transform .18s;z-index:50;pointer-events:none}
 .credit:hover .tip{visibility:visible;opacity:1;transform:translateX(-50%) translateY(0)}
-.watch{margin:20px 0}
-.watch-table td{font-size:.8rem}
-.info-btn{cursor:pointer;color:var(--accent2);font-size:.85rem;margin-left:4px;border:none;background:none}
-.info-btn:hover{color:var(--accent)}
-#modal{display:none;position:fixed;inset:0;background:rgba(5,8,15,.75);z-index:100;align-items:center;justify-content:center;padding:20px}
-#modal-card{background:var(--card);border:1px solid var(--border);border-radius:14px;max-width:760px;width:100%;max-height:85vh;overflow:auto;padding:20px}
-#modal-close{float:right;cursor:pointer;color:var(--muted);font-size:1.3rem;border:none;background:none}
-#modal-close:hover{color:var(--text)}
+
+/* ── Nút Chi Tiết Score trong bảng ── */
+.score-detail-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.35);color:var(--accent2);font-size:.78rem;font-weight:700;cursor:pointer;margin-left:4px;vertical-align:middle;transition:all .18s ease;padding:0;line-height:1}
+.score-detail-btn:hover{background:var(--accent2);color:#0f1420;border-color:var(--accent2);transform:scale(1.15);box-shadow:0 0 10px rgba(34,211,238,.4)}
+.score-detail-btn:active{transform:scale(0.95)}
+
+/* ── Nút Hướng Dẫn Header / FAB Mobile ── */
+.header-wrap{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.guide-btn{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--accent2);font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .2s;margin-top:2px}
+.guide-btn:hover{border-color:var(--accent2);background:var(--card2);transform:translateY(-1px);box-shadow:0 4px 14px rgba(34,211,238,.18)}
+
+#modal{display:none;position:fixed;inset:0;background:rgba(5,8,15,.75);backdrop-filter:blur(6px);z-index:100;align-items:center;justify-content:center;padding:20px}
+#modal-card{background:linear-gradient(180deg,var(--card),#141b2b);border:1px solid var(--border);border-radius:16px;max-width:760px;width:100%;max-height:88vh;overflow-y:auto;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.65)}
+#modal-close{float:right;cursor:pointer;color:var(--muted);font-size:1.3rem;border:none;background:none;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all .2s}
+#modal-close:hover{color:#fff;background:var(--card2)}
+
+.modal-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.modal-table th{background:var(--card2);padding:8px 10px;text-align:left;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+.modal-table td{padding:8px 10px;border-top:1px solid var(--border);vertical-align:middle}
+
 .custom-panel{margin:14px 0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .cp-head{padding:12px 16px;cursor:pointer;font-weight:600;display:flex;justify-content:space-between;align-items:center;font-size:.92rem}
 .cp-head:hover{background:var(--card2)}
@@ -74,82 +84,85 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .cp-btn{padding:5px 12px;border-radius:14px;background:var(--card2);border:1px solid var(--border);color:var(--text);cursor:pointer;font-size:.75rem;transition:.2s}
 .cp-btn:hover{border-color:var(--accent)}
 .cp-sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px 20px;margin-bottom:12px}
-.cp-slider{display:flex;align-items:center;gap:8px}
-.cp-slider label{font-size:.78rem;min-width:70px;color:var(--muted)}
-.cp-slider input[type=range]{flex:1;accent-color:var(--accent)}
-.cp-slider .val{font-size:.78rem;min-width:38px;text-align:right;color:var(--accent2);font-weight:700}
+.cp-slider{display:flex;align-items:center;gap:10px;padding:2px 0}
+.cp-slider label{font-size:.8rem;min-width:70px;color:var(--muted)}
+.cp-slider input[type=range]{flex:1;accent-color:var(--accent);height:6px;cursor:pointer}
+.cp-slider .val{font-size:.8rem;min-width:38px;text-align:right;color:var(--accent2);font-weight:700}
 .cp-total{font-size:.8rem;color:var(--muted);margin-bottom:10px}
 .cp-apply{padding:8px 18px;border-radius:8px;background:var(--accent);border:none;color:#fff;font-weight:600;cursor:pointer;font-size:.85rem}
 .cp-apply:hover{filter:brightness(1.15)}
-.table-scroll{max-height:78vh;overflow-y:auto;overflow-x:hidden;border-radius:0 0 12px 12px;border:1px solid var(--border);border-top:none}
-.table-scroll table{border-radius:0;border-collapse:separate;border-spacing:0;min-width:720px}
-.table-wrap{position:relative}
-.head-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card2);border-radius:12px 12px 0 0;border:1px solid var(--border);border-bottom:none;position:relative;z-index:10}
-.head-table th{background:var(--card2);padding:9px 10px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.7rem;letter-spacing:.4px;border-bottom:1px solid var(--border)}
-.table-scroll td{border-bottom:1px solid var(--border)}
-.table-scroll tbody tr:last-child td{border-bottom:none}
+
+/* ── Bảng Dữ liệu Thống nhất & Responsive ── */
+.table-scroll-wrap{max-height:78vh;overflow-y:auto;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--border);background:var(--card)}
+.report-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.83rem;min-width:680px}
+.report-table thead th{position:sticky;top:0;z-index:10;background:var(--card2);padding:10px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.7rem;letter-spacing:.4px;border-bottom:1px solid var(--border)}
+.report-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.report-table tbody tr{cursor:pointer;transition:background .15s}
+.report-table tbody tr:hover td{background:rgba(79,140,255,.06)}
+.report-table tbody tr:active td{background:rgba(79,140,255,.12)}
+.report-table tbody tr:last-child td{border-bottom:none}
+tr.oos-row td{opacity:.55}
 .col-rank{width:40px}
 .col-price{width:90px}
-.col-stock{width:110px}
-.col-score{width:90px}
+.col-stock{width:105px}
+.col-score{width:110px}
 .col-shop{width:80px}
-.view-btn{display:inline-block;background:var(--accent);color:#fff!important;padding:4px 12px;border-radius:6px;font-weight:600;font-size:.75rem;text-decoration:none!important;transition:.2s;margin-top:3px}
+.view-btn{display:inline-block;background:var(--accent);color:#fff!important;padding:4px 12px;border-radius:6px;font-weight:600;font-size:.75rem;text-decoration:none!important;transition:.2s;margin-top:3px;text-align:center}
 .view-btn:hover{background:#3b76e0;transform:translateY(-1px);box-shadow:0 2px 8px rgba(79,140,255,.35)}
 .view-btn:active{transform:translateY(0)}
-/* ── Responsive: mobile → bảng vuốt ngang ── */
-@media (max-width: 768px){
-  body{padding:12px}
-  h1{font-size:1.15rem}
-  .sub{font-size:.78rem}
-  .hero{grid-template-columns:repeat(2,1fr);gap:8px}
-  .hero-card{padding:10px}
-  .hero-card .big{font-size:1rem}
-  .row-label{width:100%}
-  .chip{font-size:.75rem;padding:5px 10px}
-  .cp-sliders{grid-template-columns:1fr}
-  /* bảng giữ nguyên, vuốt ngang trong container */
-  .table-wrap{display:none}
-  .mobile-scroll{display:block;max-height:75vh;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:12px;width:100%}
-  .mobile-table{min-width:720px;border-collapse:separate;border-spacing:0;width:100%}
-  .mobile-table thead{position:sticky;top:0;z-index:5;display:table-header-group}
-  .mobile-table thead th{background:var(--card2);padding:9px 10px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.7rem;letter-spacing:.4px;border-bottom:1px solid var(--border)}
-  .mobile-table td{border-bottom:1px solid var(--border)}
-  .mobile-cards{display:none}
-  .watch-table,.footer{font-size:.72rem}
-  .swipe-hint{display:flex;align-items:center;gap:6px;color:var(--accent2);font-size:.75rem;margin-bottom:6px}
-}
-@media (min-width: 769px){
-  .mobile-cards{display:none}
-  .mobile-scroll{display:none}
-  .swipe-hint{display:none}
-}
-.header-wrap{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.info-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--accent2);font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s;margin-top:2px}
-.info-btn:hover{border-color:var(--accent2);background:var(--card2);transform:scale(1.04)}
-/* Mobile: FAB góc dưới phải — luôn thấy khi cuộn */
-@media(max-width:768px){
-  .info-btn{position:fixed;right:14px;bottom:14px;z-index:90;width:50px;height:50px;border-radius:50%;justify-content:center;font-size:1.2rem;padding:0;box-shadow:0 4px 16px rgba(0,0,0,.4)}
-  .info-btn .ib-label{display:none}
-  body{padding-bottom:70px}
-}
-.log-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:center;justify-content:center;padding:16px}
-.log-modal.open{display:flex}
-.log-card{background:var(--card);border:1px solid var(--border);border-radius:14px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:22px;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.5)}
-.log-card h3{color:var(--gold);margin:0 0 4px;font-size:1.05rem}
-.log-card .log-sub{color:var(--muted);font-size:.78rem;margin-bottom:14px}
-.log-close{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
-.log-close:hover{color:#fff}
-.log-item{border-left:3px solid var(--accent2);padding:10px 12px;margin-bottom:12px;background:var(--card2);border-radius:0 8px 8px 0}
-.log-item .ver{font-weight:700;color:var(--accent2);font-size:.9rem}
-.log-item .date{color:var(--muted);font-size:.72rem;margin-left:8px}
-.log-item ul{margin:6px 0 0;padding-left:18px}
-.log-item li{font-size:.82rem;line-height:1.55;color:#d0d5e0;margin-bottom:3px}
-.log-item li b{color:var(--gold)}
-.vf-badge{font-size:.65rem;vertical-align:super;margin-right:2px}
+
+.vf-badge{font-size:.65rem;margin-right:2px}
 .vf-up{color:var(--green)}
 .vf-down{color:var(--red)}
-.sort-toggle{margin-left:10px;padding:3px 10px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:.72rem;cursor:pointer}
-.sort-toggle.active{color:var(--accent2);border-color:var(--accent2)}
+.sort-toggle{margin-left:10px;padding:4px 12px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:.75rem;cursor:pointer;transition:all .18s}
+.sort-toggle:hover{border-color:var(--accent2);color:var(--text)}
+.sort-toggle.active{color:var(--accent2);border-color:var(--accent2);font-weight:600}
+
+/* ── Responsive Mobile & Tablet ── */
+@media (max-width: 768px){
+  body{padding:12px;padding-bottom:85px}
+  h1{font-size:1.18rem}
+  .sub{font-size:.78rem;margin-bottom:14px}
+  .notice{font-size:.78rem;padding:10px 12px;margin-bottom:14px}
+  .hero{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+  .hero-card{padding:10px}
+  .hero-card .big{font-size:1.05rem}
+  .row{flex-direction:column;align-items:flex-start;gap:6px;margin-bottom:10px}
+  .row-label{width:100%;font-size:.78rem}
+  .chips-group{display:flex;gap:6px;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .chip{font-size:.76rem;padding:6px 12px;flex-shrink:0}
+  .cp-sliders{grid-template-columns:1fr;gap:8px}
+  .table-scroll-wrap{max-height:72vh;border-radius:10px}
+  .report-table{font-size:.78rem;min-width:630px}
+  .report-table td{padding:8px}
+  .col-rank{width:32px}
+  .col-price{width:80px}
+  .col-stock{width:95px}
+  .col-score{width:100px}
+  .col-shop{width:70px}
+  .score-detail-btn{width:24px;height:24px;font-size:.82rem;margin-left:4px}
+  .view-btn{padding:5px 12px;font-size:.72rem}
+  .guide-btn{position:fixed;right:16px;bottom:16px;z-index:90;width:52px;height:52px;border-radius:50%;justify-content:center;font-size:1.25rem;padding:0;background:linear-gradient(135deg,var(--card),var(--card2));border:1.5px solid var(--accent2);box-shadow:0 8px 24px rgba(0,0,0,.6),0 0 16px rgba(34,211,238,.25)}
+  .guide-btn .guide-btn-label{display:none}
+  .swipe-hint{display:flex;align-items:center;gap:6px;color:var(--accent2);font-size:.74rem;margin-bottom:6px}
+  .table-header-info{flex-direction:column;gap:6px;margin-bottom:8px}
+  .thi-right{display:flex;justify-content:space-between;align-items:center;width:100%}
+  .thi-hint{display:none}
+  .watch-table,.footer{font-size:.72rem}
+  #modal{padding:10px}
+  #modal-card{padding:16px;max-height:92vh;border-radius:14px}
+  .log-card{padding:20px 16px;border-radius:14px}
+}
+@media (max-width: 520px){
+  .modal-table .col-bar{display:none}
+  .modal-score-box{min-width:70px}
+}
+@media (min-width: 769px){
+  .swipe-hint{display:none}
+  .chips-group{display:contents}
+  .table-header-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:var(--muted);font-size:.85rem}
+  .thi-right{display:flex;align-items:center;gap:10px}
+}
 
 /* ── Update Log + Tiêu chí chấm điểm — notebook design ── */
 .log-modal{display:none;position:fixed;inset:0;background:rgba(5,8,16,.72);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center;padding:16px}
@@ -221,9 +234,9 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 <div class="header-wrap">
 <div>
 <h1>💻 Laptop VN — 7 phân khúc giá × 6 chuyên ngành</h1>
-<div class="sub">Khảo sát 13 shop (TGDD, FPT, PhongVũ, Hacom, No1, CellphoneS, LaptopWorld, LaptopAZ, Laptop88, LaptopGame, Hoàng Hà, GearVN, ShopDunk) • 3328 máy mới • Cập nhật 13/08/2026 • <b style="color:var(--gold)">Giá + tình trạng hàng đã verify PDP</b></div>
+<div class="sub">Khảo sát 13 shop (CellphoneS, FPT, GearVN, Hacom, Hoàng Hà, Laptop88, LaptopAZ, LaptopGame, LaptopWorld, No1, PhongVũ, SHOPDUNK, TGDD) • 3328 máy mới • Cập nhật 16/08/2026 • <b style="color:var(--gold)">Giá + tình trạng hàng đã verify PDP</b></div>
 </div>
-<button class="info-btn" onclick="openLog()" title="Cập nhật & hướng dẫn">ⓘ<span class="ib-label"> Hướng dẫn</span></button>
+<button class="guide-btn" onclick="openLog()" title="Cập nhật & hướng dẫn">ⓘ<span class="guide-btn-label"> Hướng dẫn & Tiêu chí</span></button>
 </div>
 
 <!-- Update Log + Tiêu chí chấm điểm modal -->
@@ -231,7 +244,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
   <div class="log-card">
     <button class="log-close" onclick="closeLog()">✕</button>
     <h3>📋 Cập nhật & hướng dẫn</h3>
-    <div class="log-sub">Bản cập nhật 13/08/2026 — những gì mới & cách dùng</div>
+    <div class="log-sub">Bản cập nhật 16/08/2026 — những gì mới & cách dùng</div>
     <div class="log-tabs">
       <button class="tab-btn active" data-tab="updates" onclick="switchLogTab(this)">Cập nhật</button>
       <button class="tab-btn" data-tab="criteria" onclick="switchLogTab(this)">Tiêu chí chấm điểm</button>
@@ -239,7 +252,17 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 
     <div class="tab-pane active" id="pane-updates">
     <div class="log-item">
-      <div class="ver">v2.3 — 13/08/2026 <span class="date">bản mới nhất</span></div>
+      <div class="ver">v2.4 — 16/08/2026 <span class="date">bản mới nhất</span></div>
+      <ul>
+        <li><b>Sửa toàn diện giao diện Mobile & Màn hình hẹp</b> — Khắc phục lỗi mất nút xem chi tiết Score (<code>ⓘ</code>), tối ưu thanh cuộn và layout trực quan</li>
+        <li><b>Chạm nhanh (Quick Tap)</b> — Bấm vào bất kỳ đâu trên dòng sản phẩm để mở ngay bảng phân tích điểm chi tiết</li>
+        <li><b>Đường viền bảng liền mạch</b> — Tối ưu CSS table-cell đảm bảo đường phân cách giữa các hàng phẳng đẹp, không bị lồi</li>
+        <li><b>Tự động cập nhật số liệu động</b> — Đếm động số lượng máy, đại lý phân phối và các phân khúc giá</li>
+      </ul>
+    </div>
+
+    <div class="log-item">
+      <div class="ver">v2.3 — 13/08/2026</div>
       <ul>
         <li><b>Chuẩn hoá thang điểm theo max thực tế</b> — CPU/GPU chấm theo đỉnh laptop thật (RTX 5090 = 100), kéo giãn khoảng cách máy cao cấp</li>
         <li><b>Bỏ máy desktop</b> (Mac Studio/Pro/iMac) khỏi ranking — chỉ còn laptop thật</li>
@@ -372,8 +395,8 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 </div>
 
 <div class="controls">
-<div class="row"><div class="row-label">💰 Phân khúc:</div><div class="chip" data-seg="d10" onclick="selectSeg(this)">💸 Dưới 10tr</div><div class="chip" data-seg="s10" onclick="selectSeg(this)">📘 10 – 15tr</div><div class="chip" data-seg="s15" onclick="selectSeg(this)">🎯 15 – 20tr</div><div class="chip" data-seg="s20" onclick="selectSeg(this)">🚀 20 – 25tr</div><div class="chip" data-seg="s25" onclick="selectSeg(this)">⚡ 25 – 30tr</div><div class="chip" data-seg="s30" onclick="selectSeg(this)">💎 30 – 40tr</div><div class="chip" data-seg="s40" onclick="selectSeg(this)">👑 Trên 40tr</div></div>
-<div class="row"><div class="row-label">🎓 Chuyên ngành:</div><div class="chip" data-prof="AI / Data Science" onclick="selectProf(this)">AI / Data Science</div><div class="chip" data-prof="Lập trình / CNTT" onclick="selectProf(this)">Lập trình / CNTT</div><div class="chip" data-prof="Đồ họa / Thiết kế" onclick="selectProf(this)">Đồ họa / Thiết kế</div><div class="chip" data-prof="Kinh tế / Văn phòng" onclick="selectProf(this)">Kinh tế / Văn phòng</div><div class="chip" data-prof="Game / Đa phương tiện" onclick="selectProf(this)">Game / Đa phương tiện</div><div class="chip" data-prof="Cơ khí / Kỹ thuật (CAD)" onclick="selectProf(this)">Cơ khí / Kỹ thuật (CAD)</div></div>
+<div class="row"><div class="row-label">💰 Phân khúc:</div><div class="chips-group"><div class="chip" data-seg="d10" onclick="selectSeg(this)">💸 Dưới 10tr</div><div class="chip" data-seg="s10" onclick="selectSeg(this)">📘 10 – 15tr</div><div class="chip" data-seg="s15" onclick="selectSeg(this)">🎯 15 – 20tr</div><div class="chip" data-seg="s20" onclick="selectSeg(this)">🚀 20 – 25tr</div><div class="chip" data-seg="s25" onclick="selectSeg(this)">⚡ 25 – 30tr</div><div class="chip" data-seg="s30" onclick="selectSeg(this)">💎 30 – 40tr</div><div class="chip" data-seg="s40" onclick="selectSeg(this)">👑 Trên 40tr</div></div></div>
+<div class="row"><div class="row-label">🎓 Chuyên ngành:</div><div class="chips-group"><div class="chip" data-prof="AI / Data Science" onclick="selectProf(this)">AI / Data Science</div><div class="chip" data-prof="Lập trình / CNTT" onclick="selectProf(this)">Lập trình / CNTT</div><div class="chip" data-prof="Đồ họa / Thiết kế" onclick="selectProf(this)">Đồ họa / Thiết kế</div><div class="chip" data-prof="Kinh tế / Văn phòng" onclick="selectProf(this)">Kinh tế / Văn phòng</div><div class="chip" data-prof="Game / Đa phương tiện" onclick="selectProf(this)">Game / Đa phương tiện</div><div class="chip" data-prof="Cơ khí / Kỹ thuật (CAD)" onclick="selectProf(this)">Cơ khí / Kỹ thuật (CAD)</div></div></div>
 </div>
 
 <div class="row" style="margin-top:8px">
@@ -448,7 +471,7 @@ function showDetail(r){
   for(let i=0;i<6;i++){
     const sc = r.q[i]||0, wt = w[WKEYS[i]]||0;
     const pct = (sc*wt).toFixed(1);
-    rows += `<tr><td style="white-space:nowrap">${KNAMES[i]}</td><td style="text-align:center">${Math.round(wt*100)}%</td><td style="text-align:center">${sc.toFixed(0)}/100</td><td style="text-align:center;color:var(--accent2);font-weight:700">${pct}</td><td><div style="background:var(--card2);border-radius:4px;height:8px"><div style="background:linear-gradient(90deg,var(--accent),var(--accent2));height:8px;border-radius:4px;width:${Math.round(sc)}%"></div></div></td><td style="font-size:.72rem;color:var(--muted)">${detVals[i]}</td></tr>`;
+    rows += `<tr><td style="white-space:nowrap;font-weight:600">${KNAMES[i]}</td><td style="text-align:center">${Math.round(wt*100)}%</td><td style="text-align:center">${sc.toFixed(0)}/100</td><td style="text-align:center;color:var(--accent2);font-weight:700">${pct}</td><td class="col-bar"><div style="background:var(--card2);border-radius:4px;height:8px"><div style="background:linear-gradient(90deg,var(--accent),var(--accent2));height:8px;border-radius:4px;width:${Math.round(sc)}%"></div></div></td><td style="font-size:.72rem;color:var(--muted)">${detVals[i]}</td></tr>`;
   }
   const seg = SEGS.find(s=>s.id===curSeg);
   const vf = valueFactorFor(r.p, seg);
@@ -456,13 +479,14 @@ function showDetail(r){
   const score = hw * vf;
   const estNote = r.e ? '<div style="color:var(--gold);font-size:.75rem;margin-top:4px">⚠️ CPU không nhận diện được — điểm CPU là ước tính (60/100)</div>' : '';
   document.getElementById('modal-body').innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px">
-      <div><div style="font-weight:700;font-size:1rem;line-height:1.4">${estBadge(r)}${r.n}</div>
-      <div style="color:var(--muted);font-size:.8rem;margin-top:4px">${fmtPrice(r.p)} • ${SHOPL[r.s]||r.s} • ${badge(r.k)}</div>${estNote}</div>
-      <div style="text-align:center;min-width:80px"><div style="font-size:1.6rem;font-weight:800;color:var(--accent2)">${score.toFixed(1)}</div><div style="font-size:.65rem;color:var(--muted)">ĐIỂM GIÁ TRỊ</div><div style="font-size:.9rem;font-weight:700;color:var(--gold);margin-top:2px">${hw.toFixed(1)}</div><div style="font-size:.6rem;color:var(--muted)">phần cứng</div></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px">
+      <div><div style="font-weight:700;font-size:1.05rem;line-height:1.4">${estBadge(r)}${r.n}</div>
+      <div style="color:var(--muted);font-size:.82rem;margin-top:4px"><span class="price">${fmtPrice(r.p)}</span> • <b>${SHOPL[r.s]||r.s}</b> • ${badge(r.k)}</div>${estNote}</div>
+      <div class="modal-score-box" style="text-align:center;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:8px 12px"><div style="font-size:1.6rem;font-weight:800;color:var(--accent2);line-height:1.1">${score.toFixed(1)}</div><div style="font-size:.65rem;color:var(--muted);font-weight:600">ĐIỂM GIÁ TRỊ</div><div style="font-size:.92rem;font-weight:700;color:var(--gold);margin-top:4px">${hw.toFixed(1)}</div><div style="font-size:.6rem;color:var(--muted)">phần cứng</div></div>
     </div>
-    <div style="color:var(--muted);font-size:.78rem;margin-bottom:10px;line-height:1.7">Ngành <b style="color:var(--accent2)">${curProf}</b> — điểm phần cứng (tiêu chí × trọng số) = <b style="color:var(--accent2)">${hw.toFixed(1)}</b><br>Hệ số giá trị phân khúc (độ gần giữa band ${seg.emoji} ${seg.label}): <b style="color:var(--accent2)">${vf.toFixed(2)}</b> — giới hạn 0.85–1.15<br>= <b style="color:var(--accent2)">${score.toFixed(1)}</b> điểm cuối (giá trị)</div>
-    <table style="width:100%;font-size:.8rem"><tr><th>Tiêu chí</th><th style="text-align:center">Trọng số</th><th style="text-align:center">Điểm</th><th style="text-align:center">Đóng góp</th><th style="width:30%"></th><th>Chi tiết</th></tr>${rows}</table>`;
+    <div style="color:var(--muted);font-size:.78rem;margin-bottom:12px;line-height:1.7;background:rgba(79,140,255,.05);border:1px solid var(--border);border-radius:10px;padding:10px 12px">Ngành <b style="color:var(--accent2)">${curProf}</b> — Điểm phần cứng: <b style="color:var(--accent2)">${hw.toFixed(1)}</b> • Hệ số giá trị phân khúc ${seg.emoji}: <b style="color:var(--accent2)">${vf.toFixed(2)}</b> (chặn 0.85–1.15)<br>➜ <b style="color:var(--accent2);font-size:.85rem">${score.toFixed(1)}</b> điểm xếp hạng</div>
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="modal-table"><thead><tr><th>Tiêu chí</th><th style="text-align:center">Trọng số</th><th style="text-align:center">Điểm</th><th style="text-align:center">Đóng góp</th><th class="col-bar" style="width:25%">Thang điểm</th><th>Cấu hình</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div style="margin-top:14px;text-align:right"><a class="view-btn" href="${r.u}" target="_blank" rel="noopener" style="padding:7px 18px;font-size:.82rem">Xem trên website ${SHOPL[r.s]||r.s} ↗</a></div>`;
   document.getElementById('modal').style.display = 'flex';
 }
 function closeModal(){document.getElementById('modal').style.display='none';}
@@ -487,20 +511,20 @@ function render(){
   if(hideOOS) inBand = inBand.filter(x=>x.k!=='HẾT');
   const scored = inBand.map(r=>({r, hw: computeScore(r,w,curProf), vf: valueFactorFor(r.p,seg)})).map(x=>({...x, s:x.hw*x.vf}));
   scored.sort((a,b)=> sortMode==='hw' ? b.hw-a.hw : b.s-a.s);
-  // Desktop table
+  
   let rows = scored.map((item,i)=>{
     const r = item.r, oos = r.k==='HẾT'?' class="oos-row"':'';
     const vfBadge = item.vf > 1.08 ? '<span class="vf-badge vf-up" title="Giá thấp hơn phần cứng — đáng mua">▲</span>' : (item.vf < 0.92 ? '<span class="vf-badge vf-down" title="Giá cao hơn phần cứng">▼</span>' : '');
-    return `<tr${oos}><td class="rank ${i===0?'rank-1':''} col-rank">${i+1}</td><td><div class="name">${estBadge(r)}${r.n.slice(0,85)}</div><div class="spec">${spec(r)}</div></td><td class="price col-price">${fmtPrice(r.p)}</td><td class="col-stock">${badge(r.k)}</td><td class="score col-score">${item.s.toFixed(1)} ${vfBadge}<span class="info-btn" onclick="showDetail(ITEMS[${ITEMS.indexOf(r)}])" title="Xem giải thích điểm">ⓘ</span></td><td class="col-shop"><span class="shop">${SHOPL[r.s]||r.s}</span><br><a class="view-btn" href="${r.u}" target="_blank" rel="noopener">Xem</a></td></tr>`;
+    const itemIdx = ITEMS.indexOf(r);
+    return `<tr${oos} onclick="showDetail(ITEMS[${itemIdx}])"><td class="rank ${i===0?'rank-1':''} col-rank">${i+1}</td><td><div class="name">${estBadge(r)}${r.n.slice(0,85)}</div><div class="spec">${spec(r)}</div></td><td class="price col-price">${fmtPrice(r.p)}</td><td class="col-stock">${badge(r.k)}</td><td class="score col-score"><span class="score-val">${item.s.toFixed(1)}</span> ${vfBadge}<button class="score-detail-btn" onclick="event.stopPropagation();showDetail(ITEMS[${itemIdx}])" title="Xem chi tiết cách tính điểm" aria-label="Chi tiết điểm">ⓘ</button></td><td class="col-shop"><span class="shop">${SHOPL[r.s]||r.s}</span><br><a class="view-btn" href="${r.u}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Xem</a></td></tr>`;
   }).join('');
-  // Mobile cards
+
   const mode = customWeights ? '🎛️ trọng số tự chỉnh' : `ngành <b style="color:var(--accent2)">${curProf}</b>`;
   const oosInfo = hideOOS ? ' (đã ẩn máy hết hàng)' : '';
-  const header = `<div style="margin-bottom:10px;color:var(--muted);font-size:.85rem">Phân khúc <b style="color:var(--accent2)">${seg.emoji} ${seg.label}</b> — <b style="color:var(--accent2)">${scored.length}</b> máy • ${mode}${oosInfo} • <span style="color:var(--muted)">bấm ⓘ xem giải thích • <span class="vf-up" style="color:var(--green)">▲</span> giá hời · <span class="vf-down" style="color:var(--red)">▼</span> giá cao hơn phần cứng • cuộn xem hết</span><button class="sort-toggle ${sortMode==='hw'?'active':''}" onclick="toggleSort()">${sortMode==='hw'?'Sort: phần cứng':'Sort: giá trị'}</button></div>`;
-  const desktop = `<div class="table-wrap"><table class="head-table"><thead><tr><th class="col-rank">#</th><th>Sản phẩm</th><th class="col-price">Giá</th><th class="col-stock">Hàng</th><th class="col-score">Điểm</th><th class="col-shop">Shop</th></tr></thead></table><div class="table-scroll"><table><tbody>${rows}</tbody></table></div></div>`;
-  // Mobile: 1 bảng duy nhất (thead sticky) trong container vuốt ngang+dọc
-  const mobile = `<div class="swipe-hint">👆 Vuốt ngang để xem hết bảng • vuốt dọc xem hết máy</div><div class="mobile-scroll"><table class="mobile-table"><thead><tr><th class="col-rank">#</th><th>Sản phẩm</th><th class="col-price">Giá</th><th class="col-stock">Hàng</th><th class="col-score">Điểm</th><th class="col-shop">Shop</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-  document.getElementById('table-container').innerHTML = header + desktop + mobile;
+  const header = `<div class="table-header-info"><div class="thi-left">Phân khúc <b style="color:var(--accent2)">${seg.emoji} ${seg.label}</b> — <b style="color:var(--accent2)">${scored.length}</b> máy • ${mode}${oosInfo}</div><div class="thi-right"><span class="thi-hint">bấm ⓘ hoặc bấm hàng xem giải thích • <span class="vf-up" style="color:var(--green)">▲</span> giá hời · <span class="vf-down" style="color:var(--red)">▼</span> giá cao hơn phần cứng</span><button class="sort-toggle ${sortMode==='hw'?'active':''}" onclick="toggleSort()">${sortMode==='hw'?'Sort: phần cứng':'Sort: giá trị'}</button></div></div>`;
+  const swipeHint = `<div class="swipe-hint">👆 Vuốt ngang xem hết bảng • Bấm vào hàng hoặc nút ⓘ để xem chi tiết điểm</div>`;
+  const table = `<div class="table-scroll-wrap"><table class="report-table"><thead><tr><th class="col-rank">#</th><th>Sản phẩm</th><th class="col-price">Giá</th><th class="col-stock">Hàng</th><th class="col-score">Điểm</th><th class="col-shop">Shop</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  document.getElementById('table-container').innerHTML = header + swipeHint + table;
 }
 // custom weights
 const CRITERIA = [['cpu','CPU'],['ram','RAM'],['gpu','GPU'],['display','Màn hình'],['battery','Pin'],['storage','Ổ cứng']];
