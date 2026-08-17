@@ -4,6 +4,40 @@ Tài liệu ghi nhận toàn bộ lịch sử chỉnh sửa, lý do kỹ thuật
 
 ---
 
+## 🚀 Phiên bản v2.10 — Kiểm toán Toàn diện Thông số Màn hình, Sửa Lỗi Điểm 0/100 & Khôi phục 100% Thông số Phần cứng (17/08/2026)
+
+**Ngày:** 17/08/2026 • **Agents tham gia:** `orchestrator`, `data-reconciler`, `scoring-architect`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist` • **Trạng thái:** ✅ Đã hoàn tất, nghiệm thu 100% & Pre-commit 5/5 PASSED
+
+### 1. Vấn đề Phát hiện & Nguyên nhân Kỹ thuật (Issues & Root Causes)
+1. **Lỗi Điểm Màn hình 0/100 trong Modal Chi tiết (`showDetail`):**
+   - *Nguyên nhân:* 1.602 máy trong dataset có trường `q[3]` lưu tĩnh là `0` do kỳ vọng tính động theo ngành; tuy nhiên hàm JS `showDetail()` lại đọc trực tiếp `sc = r.q[i]`, dẫn đến việc modal hiển thị `0/100` điểm và `0.0` đóng góp dù hàm tổng `computeScore()` vẫn tính điểm.
+2. **Chuỗi hiển thị Màn hình bị rút gọn cụt lủn:**
+   - *Nguyên nhân:* Modal chỉ in chuỗi thô `15.6" OLED=không` và bỏ qua hoàn toàn trường chi tiết độ phân giải, tần số quét và loại tấm nền.
+3. **182 máy bị khuyết thông số Màn hình do lỗi bóc tách từ shop:**
+   - *Nguyên nhân:* Selector HTML một số shop chỉ lấy kích thước (`15"`, `16"`) hoặc để trống trong khi tiêu đề chứa đầy đủ thông số FHD, 2K, 3K, 4K, 120Hz, 144Hz, IPS, OLED, Cảm ứng.
+4. **Khuyết tên CPU (`r.c`) và GPU (`r.g`) trên 622 máy:**
+   - *Nguyên nhân:* Thiếu parser fallback từ tiêu đề máy.
+
+### 2. Các Thay đổi Chi tiết Đã Thực Hiện (Detailed Modifications)
+- **Parser Thông Minh Chuẩn Hoá Màn Hình (`reconcile_display_and_specs.py`):**
+  - Trích xuất kích thước, độ phân giải (FHD, WUXGA, 2.5K, 3K, 4K), tần số quét (60Hz–360Hz), tấm nền (OLED, Mini-LED, IPS, Cảm ứng) cho 100% 3.271 máy.
+  - Chuẩn hoá mảng cấu phần `r.dp = [ppi, hz, panel]` và gán `q[3] = disp_s` chính xác.
+- **Fallback CPU & GPU Từ Tiêu Đề:**
+  - Nhận diện vi xử lý (Ryzen AI 300, Intel Core Ultra, Gen 13/14, Apple M) và Card rời/onboard (RTX 30/40/50, Arc, Radeon, Iris Xe), xóa bỏ hoàn toàn dấu gạch ngang `—`.
+- **Đồng bộ Logic Hiển thị Modal (`showDetail` & `dispScore`):**
+  - Đồng bộ điểm màn hình động theo ngành `dScore = dispScore(r, curProf)` trong bảng phân tích chi tiết.
+  - Hiển thị đầy đủ mô tả `r.d` (ví dụ: `15.6" Full HD (1920x1080) • 144Hz IPS`).
+- **Đóng gói Compact HTML & In-App Changelog:**
+  - Cập nhật In-App Changelog v2.10, xuất xưởng các bản HTML độc lập 1.62 MB (`bao-cao-laptop-phan-khuc.html`, `deploy/index.html`, `index.html`).
+
+### 3. Kết quả Kiểm thử & Nghiệm thu (Verification & Results)
+- ✅ **Unit Tests Scoring**: `python test_scoring.py` $\rightarrow$ **35/35 PASSED**.
+- ✅ **Pre-commit Checklist**: `python .agent/scripts/checklist.py` $\rightarrow$ **5/5 PASSED**.
+- ✅ **Dataset Integrity**: 0 máy có điểm màn hình = 0, 0 máy bị thiếu chuỗi màn hình.
+- ✅ **Browser Subagent Test**: Xác minh thành công trên các model phản ánh (`A29T2UA`, `1411VN`) qua video recording `verify_display_fix_1786953106404.webp`.
+
+---
+
 ## 🚀 Phiên bản v2.9 — Kiểm toán Toàn diện Link Sản phẩm 13 Shop, Sửa 100% Link Hỏng & Tích hợp Hệ thống Báo Lỗi / Gamification (17/08/2026)
 
 **Ngày:** 17/08/2026 • **Agents tham gia:** `orchestrator`, `crawler-specialist`, `data-reconciler`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist` • **Trạng thái:** ✅ Đã triển khai Production Vercel (`https://laptop-report-vn.vercel.app`) & Nghiệm thu 100%

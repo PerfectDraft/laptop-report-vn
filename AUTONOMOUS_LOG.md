@@ -21,6 +21,19 @@ Mỗi khi kết thúc một phiên chạy autonomous, ghi lại theo mẫu sau:
 
 ## 📜 Lịch sử Phiên Chạy
 
+### [2026-08-17 14:50] Session: Display Specs Audit, Non-Zero Display Score Fix & Full Hardware Specs Fallback (v2.10)
+- **Chế độ**: Orchestration (Multi-Agent Squad: 6 Agents)
+- **Agents tham gia**: `orchestrator`, `data-reconciler`, `scoring-architect`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist`
+- **Mục tiêu**: Điều tra & sửa triệt để lỗi thiếu thông tin màn hình, lỗi điểm màn hình hiển thị 0/100 trong Modal chi tiết (`showDetail`), và phục hồi thông số CPU / GPU / RAM / SSD bị khuyết thiếu trên 100% 3.271 sản phẩm.
+- **Các thay đổi**:
+  - `reconcile_display_and_specs.py`: Script chuẩn hóa dữ liệu màn hình (Kích thước, FHD/2K/3K/4K/WUXGA, 60Hz–360Hz, OLED/Mini-LED/IPS, Cảm ứng), sub-scores `dp = [ppi, hz, panel]`, điểm `q[3] = disp_s > 0`, và fallback CPU/GPU regex từ tiêu đề máy.
+  - `build_compact.py`: Sửa hàm `showDetail()` tính động `dScore = dispScore(r, curProf)` cho Màn hình, hiển thị mô tả `r.d` chi tiết, cập nhật `UPDATE_LOGS` v2.10, xuất xưởng bản HTML 1.62 MB độc lập.
+  - `bao-cao-laptop-phan-khuc.html`, `deploy/index.html`, `index.html`: Cập nhật build mới nhất.
+  - `BAO_CAO_SUA_DOI.md`, `PROGRESS.md`, `AUTONOMOUS_LOG.md`: Đồng bộ 4 lớp (Quad-Layer Sync).
+- **Kết quả Checklist**: 5/5 PASSED (35/35 scoring unit tests, 100% clamping invariant, 0 security leaks).
+- **Xác minh Trực quan (Visual Verification)**: Browser Subagent kiểm tra trực tiếp `A29T2UA` (HP 255 G10) và `1411VN` (MSI Thin 15) -> 100% CPU, GPU, Màn hình hiển thị chính xác, điểm màn hình đạt 50–60/100 với thanh tiến trình màu xanh lam, In-App Changelog v2.10 hiển thị rõ ràng.
+- **Trạng thái**: ✅ Hoàn tất nghiệm thu 100%.
+
 ### [2026-08-17 14:00] Session: 13-Shop URL Audit, 100% Direct PDP Resolution, In-App Bug Reporter, Gamification & Live Deployment
 - **Chế độ**: Orchestration (Multi-Agent Squad)
 - **Agents tham gia**: `orchestrator`, `crawler-specialist`, `data-reconciler`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist`

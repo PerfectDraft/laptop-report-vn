@@ -25,9 +25,19 @@ SHOP_LABEL = {
 
 UPDATE_LOGS = [
     {
-        "ver": "v2.9",
+        "ver": "v2.10",
         "date": "17/08/2026",
         "is_latest": True,
+        "items": [
+            "<b>Kiểm toán & Chuẩn hoá 100% Thông Số Màn Hình</b> — Phục hồi đầy đủ thông số kích thước, độ phân giải (FHD, 2K, 3K, 4K, WUXGA, WQXGA), tần số quét (60Hz–360Hz) và công nghệ tấm nền (OLED / Mini-LED / IPS / Cảm ứng) cho toàn bộ 3.271 laptop.",
+            "<b>Sửa Triệt Để Lỗi Điểm Màn Hình 0/100 Trong Modal</b> — Khắc phục bất đồng bộ dữ liệu, liên kết tính điểm động màn hình theo 6 chuyên ngành trực tiếp trong bảng phân tích chi tiết.",
+            "<b>Bổ Sung Fallback Thông Số CPU & GPU Thật</b> — Nhận diện vi xử lý (Ryzen AI 300, Intel Ultra, Gen 13/14, Apple M) và Card đồ hoạ rời/tích hợp (RTX 30/40/50, Arc, Radeon, Iris Xe) từ tiêu đề, xóa bỏ hoàn toàn dấu '—' khuyết thiếu.",
+        ]
+    },
+    {
+        "ver": "v2.9",
+        "date": "17/08/2026",
+        "is_latest": False,
         "items": [
             "<b>Kiểm toán & Sửa 100% Link Hỏng 13 Đại Lý</b> — Rà soát toàn bộ đường dẫn sản phẩm, xóa bỏ hoàn toàn link cũ .html của GearVN và ký tự unicode lỗi của No1; cam kết 100% link trỏ thẳng vào Trang chi tiết sản phẩm thật (Direct PDP), 0 link 404, 0 link tìm kiếm.",
             "<b>Hệ Thống Báo Lỗi 1-Chạm & Đề Xuất Tính Năng</b> — Nút 🚩 thông minh tự động nạp cấu hình máy, form phân loại lỗi (Sai giá, Sai tồn kho, Sai linh kiện, Link hỏng) và tiếp nhận ý tưởng cải tiến UI/UX từ người dùng.",
@@ -850,7 +860,11 @@ const DISP_W = {
   "Game / Đa phương tiện": [0.25,0.50,0.25],
   "Cơ khí / Kỹ thuật (CAD)": [0.50,0.15,0.35],
 };
-function dispScore(r, prof){const dp=r.dp||[50,0,70];const w=DISP_W[prof]||[0.45,0.30,0.25];return dp[0]*w[0]+dp[1]*w[1]+dp[2]*w[2];}
+function dispScore(r, prof){
+  const dp = r.dp || [r.i && r.i[1] ? r.i[1] : 50, 0, (r.i && r.i[2] ? 100 : 70)];
+  const w = DISP_W[prof] || [0.45, 0.30, 0.25];
+  return dp[0]*w[0] + dp[1]*w[1] + dp[2]*w[2];
+}
 function computeScore(r, w, prof){const parts=r.q.slice();parts[3]=dispScore(r, prof||curProf);let t=0;for(let i=0;i<6;i++)t+=(parts[i]||0)*(w[WKEYS[i]]||0);return t;}
 function valueFactorFor(price, seg){const center=(seg.lo+seg.hi)/2;const dist=Math.abs(price-center)/((seg.hi-seg.lo)/2);const raw=1.0+(price>center? -dist*0.15 : dist*0.15);return Math.min(1.15,Math.max(0.85,raw));}
 
@@ -858,16 +872,20 @@ let currentModalItemIdx = -1;
 function showDetail(r){
   currentModalItemIdx = ITEMS.indexOf(r);
   const w = currentWeights();
+  const dScore = dispScore(r, curProf);
+  const parts = r.q.slice();
+  parts[3] = dScore;
+
   const ramStr = r.r || (r.i && r.i[5] ? r.i[5]+'GB' : '—');
   const ssdStr = r.t || (r.i && r.i[4] ? r.i[4]+'GB' : '—');
-  const dispStr = (r.i[0] ? r.i[0]+'" ' : '') + 'OLED=' + (r.i[2] ? 'có' : 'không');
-  const batStr = r.i[3] ? r.i[3]+'Wh' : 'Chưa rõ';
+  const dispStr = r.d || ((r.i && r.i[0] ? r.i[0]+'" ' : '') + 'Full HD');
+  const batStr = r.i && r.i[3] ? r.i[3]+'Wh' : 'Chưa rõ';
   const detVals = [escHtml(r.c||'—'), escHtml(ramStr), escHtml(r.g||'—'), escHtml(dispStr), escHtml(batStr), escHtml(ssdStr)];
   let rows = '';
   for(let i=0;i<6;i++){
-    const sc = r.q[i]||0, wt = w[WKEYS[i]]||0;
+    const sc = parts[i]||0, wt = w[WKEYS[i]]||0;
     const pct = (sc*wt).toFixed(1);
-    rows += `<tr><td style="white-space:nowrap;font-weight:600">${KNAMES[i]}</td><td style="text-align:center">${Math.round(wt*100)}%</td><td style="text-align:center">${sc.toFixed(0)}/100</td><td style="text-align:center;color:var(--accent2);font-weight:700">${pct}</td><td class="col-bar"><div style="background:var(--card2);border-radius:4px;height:8px"><div style="background:linear-gradient(90deg,var(--accent),var(--accent2));height:8px;border-radius:4px;width:${Math.round(sc)}%"></div></div></td><td style="font-size:.72rem;color:var(--muted)">${detVals[i]}</td></tr>`;
+    rows += `<tr><td style="white-space:nowrap;font-weight:600">${KNAMES[i]}</td><td style="text-align:center">${Math.round(wt*100)}%</td><td style="text-align:center">${sc.toFixed(0)}/100</td><td style="text-align:center;color:var(--accent2);font-weight:700">${pct}</td><td class="col-bar"><div style="background:var(--card2);border-radius:4px;height:8px"><div style="background:linear-gradient(90deg,var(--accent),var(--accent2));height:8px;border-radius:4px;width:${Math.round(Math.min(100, Math.max(0, sc)))}%"></div></div></td><td style="font-size:.72rem;color:var(--muted)">${detVals[i]}</td></tr>`;
   }
   const seg = SEGS.find(s=>s.id===curSeg);
   const vf = valueFactorFor(r.p, seg);

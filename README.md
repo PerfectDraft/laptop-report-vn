@@ -39,9 +39,13 @@ raw/full/_ALL_scored.json # Dataset 3371 máy đã chấm điểm (local, không
 
 ## Cập nhật
 
-- **v2.1 (13/08/2026)**: Chấm điểm PassMark chuẩn, điểm RAM/Ổ cứng/Màn hình/Pin theo chuẩn ngành, bổ sung thông số 800+ máy từ PDP, thêm ShopDunk (63 máy Mac), verify tình trạng hàng, Update Log popup
+- **v2.10 (17/08/2026)**: Kiểm toán 100% thông số màn hình (Size, Resolution, Hz, Panel, Touch), sửa triệt để lỗi điểm màn hình 0/100 trong Modal chi tiết, phục hồi nhận diện vi xử lý và card đồ họa từ tiêu đề sản phẩm.
+- **v2.9 (17/08/2026)**: Sửa 100% link hỏng 13 shop sang Direct PDP, tích hợp hệ thống báo lỗi nhanh 🚩, Gamification +50 XP, Thẻ vinh danh 3D & Bảng quản lý báo cáo xuất file Excel CSV.
+- **v2.8 (17/08/2026)**: Cào dữ liệu GearVN landing page, tích hợp PassMark AMD Ryzen AI 300, Intel Ultra 200V, RTX 50 Mobile Series, mở rộng dataset lên 3.379 máy.
+- **v2.5 (16/08/2026)**: Tìm kiếm tức thì Real-time Search, mở rộng Slider 100%, XSS escaping, sửa fallback RAM/SSD.
 
 ## Dữ liệu
 
-- **Nguồn**: 13 shop VN, giá niêm yết hiện tại, cập nhật 13/08/2026
+- **Nguồn**: 13 shop VN (TGDD, FPT, Phong Vũ, Hacom, No1, CellphoneS, LaptopWorld, LaptopAZ, Laptop88, LaptopGame, Hoàng Hà, GearVN, ShopDunk), giá niêm yết hiện tại, cập nhật 17/08/2026
 - **Điểm**: CPU/GPU PassMark log-scale, RAM log2, ổ cứng chuẩn SATA-IO/PCI-SIG/NVMe, màn hình PPI+Hz+panel (RTings/DisplayMate), pin IATA/FAA 100Wh
+
