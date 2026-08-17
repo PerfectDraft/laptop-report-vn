@@ -24,9 +24,11 @@ Hệ thống quản lý và quy chuẩn vận hành dành cho Đội quân Agent
 ## 📜 Quy tắc cốt lõi (Auto-load mỗi phiên)
 Đọc theo thứ tự ưu tiên:
 1. `.agent/rules/GEMINI.md` — Quy tắc kỹ thuật chung & bất biến toán học
-2. `.agent/rules/scoring-contract.md` — Hợp đồng công thức chấm điểm & chuẩn dữ liệu
-3. `.agent/rules/autonomous-policy.md` — Quy chế chạy tự động & an toàn
-4. `.agent/rules/security-rules.md` — An toàn crawler & bảo vệ bí mật
+2. `.agent/rules/versioning-and-changelog.md` — Quy chuẩn phiên bản & đồng bộ nhật ký lên giao diện Web (In-App Changelog)
+3. `.agent/rules/progress-tracking.md` — Quy chuẩn đảm bảo tiến độ & báo cáo sửa đổi 4 lớp (Quad-Layer Sync)
+4. `.agent/rules/scoring-contract.md` — Hợp đồng công thức chấm điểm & chuẩn dữ liệu
+5. `.agent/rules/autonomous-policy.md` — Quy chế chạy tự động & an toàn
+6. `.agent/rules/security-rules.md` — An toàn crawler & bảo vệ bí mật
 
 ---
 
@@ -39,7 +41,7 @@ Nội dung kiểm tra bao gồm:
 1. ✅ **Scoring Unit Tests**: `python test_scoring.py` $\rightarrow$ 35/35 passed.
 2. ✅ **Dataset Integrity**: `all_items.json` & `_ALL_scored.json` tồn tại, cấu trúc chuẩn.
 3. ✅ **Score Clamping**: Không có điểm thành phần nào $> 100$ hoặc $< 0$.
-4. ✅ **Compact Build**: `python build_compact.py` sinh HTML hợp lệ, kích thước tối ưu.
+4. ✅ **Compact Build & In-App Changelog**: `python build_compact.py` sinh HTML hợp lệ, `UPDATE_LOGS` đồng bộ với docs.
 5. ✅ **Security Scan**: Không có hardcoded secret / API key trong mã nguồn.
 
 ---
@@ -52,8 +54,11 @@ Nội dung kiểm tra bao gồm:
 ---
 
 ## 🔄 Quy trình làm việc (Workflow Preferences — Chuẩn Widget_Date)
+- **Đồng bộ 4 Lớp (Quad-Layer Sync)** mỗi khi có phiên bản hoặc cải tiến lớn:
+  1. Cập nhật `UPDATE_LOGS` trong `build_compact.py` $\rightarrow$ Giao diện Web hiển thị ngay Modal Nhật ký `#log-modal` & Header Version Badge.
+  2. Cập nhật [BAO_CAO_SUA_DOI.md](file:///d:/UET/ProjectVibeCode/laptopReport/BAO_CAO_SUA_DOI.md) mỗi khi chỉnh sửa code, UI, data hoặc thuật toán.
+  3. Cập nhật [PROGRESS.md](file:///d:/UET/ProjectVibeCode/laptopReport/PROGRESS.md) cuối mỗi phiên làm việc.
+  4. Cập nhật [AUTONOMOUS_LOG.md](file:///d:/UET/ProjectVibeCode/laptopReport/AUTONOMOUS_LOG.md) sau mỗi phiên autonomous / orchestration.
 - Luôn chạy `python .agent/scripts/checklist.py` trước khi hoàn tất công việc (bắt buộc 5/5 PASSED).
-- Cập nhật [BAO_CAO_SUA_DOI.md](file:///d:/UET/ProjectVibeCode/laptopReport/BAO_CAO_SUA_DOI.md) mỗi khi chỉnh sửa code, UI, data hoặc thuật toán.
-- Cập nhật [PROGRESS.md](file:///d:/UET/ProjectVibeCode/laptopReport/PROGRESS.md) cuối mỗi phiên làm việc.
-- Cập nhật [AUTONOMOUS_LOG.md](file:///d:/UET/ProjectVibeCode/laptopReport/AUTONOMOUS_LOG.md) sau mỗi phiên autonomous / orchestration.
 - Không merge code và docs vào chung một commit lộn xộn.
+

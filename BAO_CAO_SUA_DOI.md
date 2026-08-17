@@ -4,6 +4,58 @@ Tài liệu ghi nhận toàn bộ lịch sử chỉnh sửa, lý do kỹ thuật
 
 ---
 
+## 🚀 Phiên bản v2.9 — Kiểm toán Toàn diện Link Sản phẩm 13 Shop, Sửa 100% Link Hỏng & Tích hợp Hệ thống Báo Lỗi / Gamification (17/08/2026)
+
+**Ngày:** 17/08/2026 • **Agents tham gia:** `orchestrator`, `crawler-specialist`, `data-reconciler`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist` • **Trạng thái:** ✅ Đã triển khai Production Vercel (`https://laptop-report-vn.vercel.app`) & Nghiệm thu 100%
+
+### 1. Mục tiêu & Phạm vi Thực hiện (Objective & Scope)
+1. **Kiểm toán & Sửa lỗi toàn bộ Link Sản phẩm (PDP) trên 13 đại lý:**
+   - Quét mã phản hồi HTTP thực tế trên toàn bộ danh mục sản phẩm (13 shop).
+   - Xóa bỏ hoàn toàn định dạng URL cũ (`.html` trên GearVN), chuyển đổi 100% sang định dạng Next.js App Router `/products/<slug>` theo sitemap chính hãng.
+   - Sửa lỗi các ký tự đặc biệt (dấu ngoặc kép unicode `″`) trên No1Computer dẫn đến lỗi 404, bổ sung cơ chế fallback tìm kiếm thông minh khi sản phẩm hết hàng hoặc đổi link.
+2. **Tích hợp Hệ thống Báo cáo Dữ liệu & Đóng góp Ý kiến Người dùng:**
+   - Nút báo lỗi nhanh 1-chạm `🚩` trên từng hàng sản phẩm và trong modal chi tiết điểm (pre-filled sẵn 100% thông số).
+   - Modal 2 Tab (`#feedback-modal`): Báo lỗi máy/giá sai và Đề xuất tính năng/giao diện UI/UX.
+3. **Tích hợp Gamification Phần Thưởng & Hiệu ứng Animation:**
+   - Hệ thống tích lũy điểm uy tín (+50 XP) và 4 cấp bậc huy hiệu (*Bug Scout, Spec Inspector, Benchmark Master, Tech Legend*).
+   - Hiệu ứng Pháo hoa Canvas Confetti 60 FPS và Thẻ Chứng Nhận Đóng Góp Vàng (Holographic 3D Golden Card).
+4. **Kiểm thử Responsive UI/UX Đa Thiết Bị:**
+   - Kiểm tra hiển thị pixel-perfect trên Mobile (390x844), Tablet (768x1024) và Laptop (1366x768).
+
+---
+
+## 🚀 Phiên bản v2.8 — Cập nhật Dữ liệu GearVN, Khớp Chuẩn Benchmark Thế Hệ Mới & Mở rộng Dataset (17/08/2026)
+
+**Ngày:** 17/08/2026 • **Agents tham gia:** `orchestrator`, `crawler-specialist`, `data-reconciler`, `scoring-architect`, `qa-test-engineer`, `devops-specialist` • **Trạng thái:** ✅ Đã hoàn tất & nghiệm thu 100%
+
+### 1. Mục tiêu & Phạm vi Thực hiện (Objective & Scope)
+1. **Thu thập dữ liệu thực tế từ 2 landing page chiến lược của GearVN:**
+   - `https://gearvn.com/pages/laptop-van-phong`
+   - `https://gearvn.com/pages/laptop-gaming`
+2. **Trích xuất & Khử trùng lặp PDP (Product Detail Page):**
+   - Thu thập 57 sản phẩm laptop duy nhất từ Next.js RSC stream và schema JSON-LD.
+   - Bóc tách 100% thông số cấu hình chính hãng: CPU, GPU, RAM, Ổ cứng SSD, Màn hình (Kích thước, độ phân giải, Hz, Panel), Dung lượng Pin (Wh), Tình trạng tồn kho (Còn hàng / Hết hàng) và Giá niêm yết/khuyến mãi.
+3. **Chuẩn hoá Thông số & Tính điểm Benchmark Chính xác Tuyệt đối (Zero-Guesswork):**
+   - Mở rộng hỗ trợ chip thế hệ mới: AMD Ryzen AI 300/400 (`AI 9 465`, `AI 9 365`, `AI 7 350`), Intel Core Ultra 200V Lunar Lake (`Ultra 9 288V`, `Ultra 5 226V`), Intel Core Ultra 9 `275HX` / `386H`, Intel Core Series 1/2 (`Core 7 240H`, `Core 5 210H`, `Core 5 120U`, `Core 3 N350`), NVIDIA GeForce RTX 50 Mobile Series (`5050`, `5060`, `5070`, `5070 Ti`).
+   - Khớp công thức chấm điểm đa ngành và hệ số giá trị phân khúc ($VF \in [0.85, 1.15]$).
+
+### 2. Các Thay đổi Chi tiết Đã Thực Hiện (Detailed Modifications)
+- **Crawler Chuyên dụng GearVN (`crawl_gearvn_landing.py`):**
+  - Giải mã RSC stream Next.js, bóc tách cấu hình sạch từ JSON-LD schema, tự động chống nghẽn rate limit (delay 0.4s - 1.0s).
+- **Bộ chuẩn hoá & Chấm điểm (`build_gearvn_scored.py`):**
+  - Làm sạch ký tự đặc biệt (®, ™), map chính xác 100% chip CPU/GPU theo PassMark Benchmark thật.
+- **Đồng bộ Cơ sở dữ liệu (`sync_gearvn_to_dataset.py`):**
+  - Cập nhật 6 sản phẩm và bổ sung 51 sản phẩm mới vào `all_items.json` và `_ALL_scored.json`, nâng quy mô dataset toàn hệ thống lên **3.379 laptop**.
+- **Đóng gói Báo cáo Single-File HTML (`build_compact.py`):**
+  - Cập nhật In-App Changelog v2.8, xuất xưởng các bản HTML độc lập ~1.73 MB (`bao-cao-laptop-phan-khuc.html`, `deploy/index.html`, `index.html`).
+
+### 3. Kết quả Kiểm thử & Nghiệm thu (Verification & Results)
+- ✅ **Unit Tests Scoring**: `python test_scoring.py` $\rightarrow$ **35/35 PASSED** (100% khớp Node.js runtime).
+- ✅ **Pre-commit Checklist**: `python .agent/scripts/checklist.py` $\rightarrow$ **5/5 PASSED**.
+- ✅ **Dataset Integrity**: Toàn bộ 3.379 máy đều thỏa mãn giới hạn $[0, 100]$, 0 dữ liệu rác, 0 secret leak.
+
+---
+
 ## 🚀 Phiên bản v2.5 — Audit Toàn Diện, Tìm & Fix Triệt Để Bug Dữ Liệu & UI (16/08/2026)
 
 **Ngày:** 16/08/2026 • **Agents tham gia:** `orchestrator`, `data-reconciler`, `scoring-architect`, `frontend-specialist`, `qa-test-engineer`, `security-auditor` • **Trạng thái:** ✅ Đã hoàn tất & nghiệm thu 100%

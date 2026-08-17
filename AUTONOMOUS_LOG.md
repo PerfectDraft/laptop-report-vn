@@ -21,6 +21,32 @@ Mỗi khi kết thúc một phiên chạy autonomous, ghi lại theo mẫu sau:
 
 ## 📜 Lịch sử Phiên Chạy
 
+### [2026-08-17 14:00] Session: 13-Shop URL Audit, 100% Direct PDP Resolution, In-App Bug Reporter, Gamification & Live Deployment
+- **Chế độ**: Orchestration (Multi-Agent Squad)
+- **Agents tham gia**: `orchestrator`, `crawler-specialist`, `data-reconciler`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist`
+- **Mục tiêu**: Quét kiểm toán mã phản hồi HTTP thực tế trên 13 shop, loại bỏ 100% link cũ .html và link tìm kiếm, chuyển sang Direct PDP 1-1, loại bỏ sản phẩm shop đã xóa; xây dựng hệ thống Báo lỗi 1-chạm (`🚩`), Gamification (+50 XP, 4 cấp bậc danh dự, pháo hoa Canvas Confetti, Thẻ Vinh Danh Vàng 3D), Bảng Quản Lý Báo Cáo có cột Tình Trạng (`🕒 Đã tiếp nhận`, `⚙️ Đang xử lý`, `✅ Đã fix`, `💡 Đã ghi nhận`, `❌ Đóng`), xuất Excel CSV và Serverless API `/api/feedback`.
+- **Các thay đổi**:
+  - `build_compact.py`: Tích hợp toàn bộ hệ thống Feedback, Gamification, Reports Admin, CSV Exporter, Status Tracker, update logs v2.9, tối ưu độ rộng modal 980px và layout bảng.
+  - `api/feedback.js`: Serverless API tiếp nhận báo cáo và chuyển tiếp Webhook.
+  - `vercel.json`: Hỗ trợ định tuyến `/api/*`.
+  - `bao-cao-laptop-phan-khuc.html`, `deploy/index.html`, `index.html`: Build compact HTML 1.43MB độc lập.
+  - `BAO_CAO_SUA_DOI.md`, `PROGRESS.md`, `AUTONOMOUS_LOG.md`: Đồng bộ 4 lớp (Quad-Layer Sync).
+- **Kết quả Checklist**: 5/5 PASSED (35/35 scoring unit tests, 100% clamping invariant, 0 security leaks).
+- **Trạng thái**: ✅ Sẵn sàng triển khai Production Vercel.
+
+### [2026-08-17 11:52] Session: GearVN Landing Crawl & Benchmark Dataset Synchronization
+- **Chế độ**: Orchestration (Multi-Agent Squad)
+- **Agents tham gia**: `orchestrator`, `crawler-specialist`, `data-reconciler`, `scoring-architect`, `qa-test-engineer`, `devops-specialist`
+- **Mục tiêu**: Thu thập 100% dữ liệu từ 2 landing page chiến lược của GearVN (`/laptop-van-phong` & `/laptop-gaming`), trích xuất PDP, chuẩn hoá PassMark Benchmark cho chip thế hệ mới 2026, đồng bộ cơ sở dữ liệu `all_items.json` lên 3.379 máy và xuất bản build compact HTML.
+- **Các thay đổi**:
+  - `crawl_gearvn_landing.py`: Crawler Next.js RSC & JSON-LD PDP.
+  - `build_gearvn_scored.py`: Engine chuẩn hoá & chấm điểm PassMark.
+  - `sync_gearvn_to_dataset.py`: Đồng bộ 57 sản phẩm (6 update, 51 thêm mới).
+  - `build_compact.py`: Thêm In-App Changelog v2.8, xuất xưởng `bao-cao-laptop-phan-khuc.html` và `deploy/index.html`.
+  - `BAO_CAO_SUA_DOI.md` & `PROGRESS.md`: Cập nhật tiến độ v2.8.
+- **Kết quả Checklist**: 5/5 PASSED (35/35 scoring unit tests, 100% clamping invariant, 0 security leaks).
+- **Trạng thái**: ✅ Hoàn tất xuất sắc & đồng bộ 4 lớp (Quad-Layer Sync).
+
 ### [2026-08-16 01:38] Session: Deep Audit, Bug Fixing & Instant Search Integration
 - **Chế độ**: Orchestration (Multi-Agent Squad)
 - **Agents tham gia**: `orchestrator`, `data-reconciler`, `scoring-architect`, `frontend-specialist`, `qa-test-engineer`, `security-auditor`

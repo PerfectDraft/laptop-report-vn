@@ -5,9 +5,10 @@ Theo dõi tiến độ phát triển, lộ trình tính năng và lịch sử ph
 ---
 
 ## 🎯 Trạng thái hiện tại
-- **Phiên bản hiện tại**: v2.5 (Audit toàn diện, Fix bug Spec/XSS/Sliders & Tích hợp Search Bar)
-- **Tổng số máy**: 3.328 sản phẩm laptop hợp lệ (13 shop VN)
-- **Tình trạng kiểm thử**: 35/35 test scoring passed ✅ • 5/5 pre-commit checks passed ✅
+- **Phiên bản hiện tại**: v2.9 (Kiểm toán Link 100% Direct PDP, Hệ thống Báo Lỗi, Gamification Thưởng & Bảng Quản Lý Báo Cáo)
+- **Tổng số máy**: 3.271 sản phẩm laptop chính hãng (13 shop VN)
+- **Môi trường Production**: 🚀 [https://laptop-report-vn.vercel.app](https://laptop-report-vn.vercel.app)
+- **Tình trạng kiểm thử**: 35/35 test scoring passed ✅ • 5/5 pre-commit checks passed ✅ • 100% Live Production Verification Passed ✅
 - **Hệ thống Agent Squad**: Đang vận hành chuẩn hóa theo Widget_Date
 
 ---
@@ -29,7 +30,21 @@ Theo dõi tiến độ phát triển, lộ trình tính năng và lịch sử ph
 - [x] Mở rộng thanh trượt slider trọng số tới 100%
 - [x] Thêm bảo mật XSS escaping cho 100% dữ liệu DOM
 
-### Phase 3: Tối ưu UI/UX, Biểu đồ Radar & So Sánh Đối Đầu (Phase Tiếp Theo) 🎨
+### Phase 3: Thu thập Dữ liệu & Benchmark Mở rộng (v2.8) ✅
+- [x] Cào và bóc tách PDP chi tiết từ GearVN Landing Pages (Laptop Văn Phòng & Gaming)
+- [x] Tích hợp điểm PassMark cho AMD Ryzen AI 300/400, Intel Ultra 200V, RTX 50 Series Mobile
+- [x] Đồng bộ dataset lên 3.379 laptop, build compact HTML 1.73MB độc lập
+- [x] Đạt chuẩn 5/5 checklist pre-commit/pre-deploy
+
+### Phase 4: Hệ thống Báo Lỗi, Gamification & Kiểm toán Link (v2.9) ✅
+- [x] Quét & sửa 100% link 404 / sai định dạng (.html cũ) trên toàn bộ 13 shop
+- [x] Tích hợp nút báo lỗi nhanh `🚩` (prefilled 100% thông số máy)
+- [x] Tích hợp Modal Góp ý 2 Tab (`#feedback-modal`) & Cẩm nang Hướng dẫn (`#log-modal`)
+- [x] Tích hợp Gamification (+50 XP, 4 cấp bậc huy hiệu) & Pháo hoa Confetti Canvas 60 FPS
+- [x] Thẻ Vinh Danh Vàng 3D (Holographic Golden Card)
+- [x] Kiểm thử Responsive hoàn hảo trên Mobile, Tablet và Laptop
+
+### Phase 5: Biểu đồ Radar & So Sánh Đối Đầu (Phase Tiếp Theo) 🎨
 - [ ] Tích hợp giao diện Redesign đồng bộ (Obsidian / Titanium / Aurora)
 - [ ] Tích hợp biểu đồ Radar 6 trục Benchmark trực quan
 - [ ] Thêm tính năng So sánh Đối đầu (Side-by-side spec comparison) 2-3 máy
@@ -41,6 +56,7 @@ Theo dõi tiến độ phát triển, lộ trình tính năng và lịch sử ph
 
 | Ngày | Agent / Vai trò | Công việc thực hiện | Trạng thái |
 |---|---|---|---|
+| 17/08/2026 | `orchestrator`, `crawler-specialist`, `data-reconciler`, `scoring-architect`, `qa-test-engineer`, `devops-specialist` | Cào & bóc tách PDP GearVN, chuẩn hoá chip thế hệ mới, đồng bộ 3.379 máy, build compact HTML | Hoàn tất v2.8 |
 | 16/08/2026 | `orchestrator`, `data-reconciler`, `frontend-specialist`, `qa-test-engineer` | Audit toàn diện dataset & scoring, fix fallback spec RAM/SSD, thêm search bar, sliders 100%, XSS escaping | Hoàn tất v2.5 |
 | 16/08/2026 | `frontend-specialist`, `qa-test-engineer`, `devops-specialist` | Sửa lỗi mất nút chi tiết Score trên mobile, sửa stepped table border, tự động hóa số liệu động | Hoàn tất v2.4 |
 | 16/08/2026 | `orchestrator` | Thiết lập Hệ thống Đội quân Agent chuyên biệt kế thừa từ Widget_Date | Hoàn tất |
