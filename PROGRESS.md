@@ -5,8 +5,8 @@ Theo dõi tiến độ phát triển, lộ trình tính năng và lịch sử ph
 ---
 
 ## 🎯 Trạng thái hiện tại
-- **Phiên bản hiện tại**: v2.10 (Kiểm toán 100% Thông số Màn hình, Sửa Lỗi Điểm 0/100, Fallback CPU/GPU/RAM/SSD Toàn Diện)
-- **Tổng số máy**: 3.271 sản phẩm laptop chính hãng (13 shop VN)
+- **Phiên bản hiện tại**: v2.11 (Khắc Phục Nhận Diện Tồn Kho, Phục Hồi 110 Máy Còn Hàng, Tối Ưu Parser Live)
+- **Tổng số máy**: 3.271 sản phẩm laptop chính hãng (13 shop VN) — 1.757 máy Còn hàng, 19 máy Hết hàng thực tế
 - **Môi trường Production**: 🚀 [https://laptop-report-vn.vercel.app](https://laptop-report-vn.vercel.app)
 - **Tình trạng kiểm thử**: 35/35 test scoring passed ✅ • 5/5 pre-commit checks passed ✅ • 100% Visual Verification Passed ✅
 - **Hệ thống Agent Squad**: Đang vận hành chuẩn hóa theo Widget_Date

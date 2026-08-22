@@ -25,9 +25,18 @@ SHOP_LABEL = {
 
 UPDATE_LOGS = [
     {
+        "ver": "v2.11",
+        "date": "22/08/2026",
+        "is_latest": True,
+        "items": [
+            "<b>Khắc Phục Lỗi Nhận Diện Tồn Kho & Phục Hồi 110 Laptop Còn Hàng</b> — Sửa triệt để lỗi thứ tự ưu tiên trong bộ parser chuỗi (loại bỏ bắt nhầm từ khóa 'hết hàng' trong footer chính sách), phục hồi chính xác trạng thái Còn hàng cho 110 máy từ CellphoneS (+55 máy), Hacom (+35 máy), LaptopGame (+18 máy) và TGDD (+2 máy).",
+            "<b>Tối Ưu Tỷ Lệ Sẵn Hàng Real-Time</b> — Tổng số laptop Còn hàng đạt 1.757 máy; số lượng máy Hết hàng thực tế giảm chuẩn xác về 19 máy.",
+        ]
+    },
+    {
         "ver": "v2.10",
         "date": "17/08/2026",
-        "is_latest": True,
+        "is_latest": False,
         "items": [
             "<b>Kiểm toán & Chuẩn hoá 100% Thông Số Màn Hình</b> — Phục hồi đầy đủ thông số kích thước, độ phân giải (FHD, 2K, 3K, 4K, WUXGA, WQXGA), tần số quét (60Hz–360Hz) và công nghệ tấm nền (OLED / Mini-LED / IPS / Cảm ứng) cho toàn bộ 3.271 laptop.",
             "<b>Sửa Triệt Để Lỗi Điểm Màn Hình 0/100 Trong Modal</b> — Khắc phục bất đồng bộ dữ liệu, liên kết tính điểm động màn hình theo 6 chuyên ngành trực tiếp trong bảng phân tích chi tiết.",

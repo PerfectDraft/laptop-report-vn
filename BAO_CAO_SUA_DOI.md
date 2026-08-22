@@ -4,6 +4,33 @@ Tài liệu ghi nhận toàn bộ lịch sử chỉnh sửa, lý do kỹ thuật
 
 ---
 
+## 🚀 Phiên bản v2.11 — Khắc Phục Lỗi Nhận Diện Tồn Kho, Phục Hồi 110 Laptop Còn Hàng & Cập Nhật Parser Live (22/08/2026)
+
+**Ngày:** 22/08/2026 • **Agents tham gia:** `orchestrator`, `crawler-specialist`, `data-reconciler`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist` • **Trạng thái:** ✅ Đã hoàn tất, nghiệm thu 100% & Pre-commit 5/5 PASSED
+
+### 1. Vấn đề Phát hiện & Nguyên nhân Kỹ thuật (Issues & Root Causes)
+1. **Lỗi Thứ Tự Ưu Tiên Trong Parser Chuỗi Thô (Global Substring Matching Inversion):**
+   - *Nguyên nhân:* Trong script xác thực cũ (`verify_stock.py`), điều kiện `if "hết hàng" in html` được kiểm tra trước `if "mua ngay" in html`.
+   - Các sàn TMĐT (*CellphoneS, Hacom, LaptopGame, TGDD*) luôn có từ khóa *"hết hàng"* xuất hiện cố định tại Footer (chính sách đổi trả, box sản phẩm tương tự khi hết hàng). Do đó, script quét chuỗi toàn trang đã bắt nhầm từ khóa ở footer và đánh dấu sai thành `✕ Hết hàng` dù nút "MUA NGAY" và "THÊM VÀO GIỎ" vẫn đang hoạt động.
+2. **Kho Hàng Đại Lý Vừa Nhập Lô Mới (Restock):**
+   - Các dòng máy (*MacBook Neo, Lenovo LOQ, Asus Vivobook, HP 250R*) sau đợt hết hàng đã được shop nhập thêm hàng về kho nhưng dữ liệu cũ chưa được refresh.
+
+### 2. Các Thay đổi Chi tiết Đã Thực Hiện (Detailed Modifications)
+- **Tối Ưu & Sửa Triệt Để Bộ Parser Tồn Kho (`verify_stock.py`):**
+   - Ưu tiên bóc tách theo thứ tự: JSON-LD `schema.org/InStock` / `OutOfStock` $\rightarrow$ Scoped Selector Nút Mua (`btn-buy`, `button__buy-now`, `btn-mua-ngay`, `MUA NGAY`) $\rightarrow$ Scoped OutOfStock (`btn-hethang`, `tạm hết hàng`).
+- **Khôi Phục Trạng Thái Tồn Kho Cho 110 Máy (`_compact_data.json`):**
+   - Phục hồi 55 máy từ CellphoneS, 35 máy từ Hacom, 18 máy từ LaptopGame và 2 máy từ TGDD về đúng trạng thái `● Còn hàng` (`k = "CÒN"`).
+   - Tỷ lệ máy Còn hàng tăng lên **1.757 máy** (tăng +110 máy), số lượng máy Hết hàng thực tế giảm chuẩn xác về **19 máy**.
+- **Đóng gói Compact HTML & Cập nhật In-App Changelog:**
+   - Cập nhật Changelog v2.11 vào `build_compact.py`, build lại toàn bộ các artifact: `bao-cao-laptop-phan-khuc.html`, `deploy/index.html`, `index.html`.
+
+### 3. Kết quả Kiểm thử & Nghiệm thu (Verification & Results)
+- ✅ **Unit Tests Scoring**: `python test_scoring.py` $\rightarrow$ **35/35 PASSED**.
+- ✅ **Pre-commit Checklist**: `python .agent/scripts/checklist.py` $\rightarrow$ **5/5 PASSED**.
+- ✅ **Live PDP Audit**: 100% 129 link sản phẩm được rà soát trực tiếp qua parser mới, bảo đảm tính xác thực cao.
+
+---
+
 ## 🚀 Phiên bản v2.10 — Kiểm toán Toàn diện Thông số Màn hình, Sửa Lỗi Điểm 0/100 & Khôi phục 100% Thông số Phần cứng (17/08/2026)
 
 **Ngày:** 17/08/2026 • **Agents tham gia:** `orchestrator`, `data-reconciler`, `scoring-architect`, `frontend-specialist`, `qa-test-engineer`, `devops-specialist` • **Trạng thái:** ✅ Đã hoàn tất, nghiệm thu 100% & Pre-commit 5/5 PASSED
